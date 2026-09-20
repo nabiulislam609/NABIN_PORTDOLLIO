@@ -2,8 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { Briefcase, PlusCircle, Filter, RotateCcw, Sparkles } from 'lucide-react';
 import { Project } from '../types.ts';
 import { ProjectCard } from './ProjectCard.tsx';
-import { ProjectCaseStudyModal } from './ProjectCaseStudyModal.tsx';
-import { ProjectFormModal } from './ProjectFormModal.tsx';
 
 interface PortfolioProps {
   projects: Project[];
@@ -12,6 +10,9 @@ interface PortfolioProps {
   onDeleteProject: (id: string, title: string) => Promise<void>;
   onResetProjects: () => Promise<void>;
   onRequestAdmin: () => void;
+  onOpenAddProject: () => void;
+  onEditProject: (project: Project) => void;
+  onViewCaseStudy: (project: Project) => void;
 }
 
 const FILTER_CATEGORIES = [
@@ -33,11 +34,11 @@ export const Portfolio: React.FC<PortfolioProps> = ({
   onDeleteProject,
   onResetProjects,
   onRequestAdmin,
+  onOpenAddProject,
+  onEditProject,
+  onViewCaseStudy,
 }) => {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [selectedCaseStudy, setSelectedCaseStudy] = useState<Project | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
 
   // Filter projects by category
   const filteredProjects = useMemo(() => {
@@ -61,13 +62,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({
       onRequestAdmin();
       return;
     }
-    setEditingProject(null);
-    setIsFormOpen(true);
-  };
-
-  const handleEdit = (project: Project) => {
-    setEditingProject(project);
-    setIsFormOpen(true);
+    onOpenAddProject();
   };
 
   const handleDelete = async (id: string, title: string) => {
@@ -160,8 +155,8 @@ export const Portfolio: React.FC<PortfolioProps> = ({
                 key={project.id}
                 project={project}
                 isAdmin={isAdmin}
-                onViewCaseStudy={(p) => setSelectedCaseStudy(p)}
-                onEdit={(p) => handleEdit(p)}
+                onViewCaseStudy={(p) => onViewCaseStudy(p)}
+                onEdit={(p) => onEditProject(p)}
                 onDelete={(id, title) => handleDelete(id, title)}
                 onRequestAdmin={onRequestAdmin}
               />
@@ -169,29 +164,6 @@ export const Portfolio: React.FC<PortfolioProps> = ({
           </div>
         )}
       </div>
-
-      {/* Case Study Details Modal */}
-      <ProjectCaseStudyModal
-        project={selectedCaseStudy}
-        onClose={() => setSelectedCaseStudy(null)}
-      />
-
-      {/* Add / Edit Project Modal */}
-      <ProjectFormModal
-        isOpen={isFormOpen}
-        projectToEdit={editingProject}
-        onClose={() => {
-          setIsFormOpen(false);
-          setEditingProject(null);
-        }}
-        onSave={async (data) => {
-          if (editingProject) {
-            await onSaveProject({ ...data, id: editingProject.id });
-          } else {
-            await onSaveProject(data);
-          }
-        }}
-      />
     </section>
   );
 };

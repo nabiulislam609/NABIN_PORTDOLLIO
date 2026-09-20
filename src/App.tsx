@@ -13,6 +13,8 @@ import { AdminLoginModal } from './components/AdminLoginModal.tsx';
 import { ProfileEditModal } from './components/ProfileEditModal.tsx';
 import { InquiriesModal } from './components/InquiriesModal.tsx';
 import { BackendDocsModal } from './components/BackendDocsModal.tsx';
+import { ProjectFormModal } from './components/ProjectFormModal.tsx';
+import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal.tsx';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.ts';
 import { ProfileConfig, Project, ContactMessage } from './types.ts';
 import {
@@ -40,6 +42,9 @@ export default function App() {
   const [isProfileEditOpen, setIsProfileEditOpen] = useState(false);
   const [isInquiriesOpen, setIsInquiriesOpen] = useState(false);
   const [isBackendDocsOpen, setIsBackendDocsOpen] = useState(false);
+  const [isProjectFormOpen, setIsProjectFormOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState<Project | null>(null);
   const [prefilledSubject, setPrefilledSubject] = useState('');
 
   // Initial Data Fetching
@@ -244,6 +249,17 @@ export default function App() {
           onDeleteProject={handleDeleteProject}
           onResetProjects={handleResetProjects}
           onRequestAdmin={() => setIsAdminLoginOpen(true)}
+          onOpenAddProject={() => {
+            setEditingProject(null);
+            setIsProjectFormOpen(true);
+          }}
+          onEditProject={(project) => {
+            setEditingProject(project);
+            setIsProjectFormOpen(true);
+          }}
+          onViewCaseStudy={(project) => {
+            setSelectedCaseStudy(project);
+          }}
         />
 
         {/* Contact Section */}
@@ -265,10 +281,8 @@ export default function App() {
         <AdminBar
           unreadInquiriesCount={inquiries.length}
           onAddNewProject={() => {
-            scrollToSection('portfolio');
-            // Trigger add project button in portfolio
-            const btn = document.getElementById('portfolio-add-project-btn');
-            if (btn) btn.click();
+            setEditingProject(null);
+            setIsProjectFormOpen(true);
           }}
           onOpenProfileSettings={() => setIsProfileEditOpen(true)}
           onOpenInquiries={() => setIsInquiriesOpen(true)}
@@ -291,6 +305,29 @@ export default function App() {
         onClose={() => setIsProfileEditOpen(false)}
         onSaveProfile={handleSaveProfile}
         onChangePassword={handleChangePassword}
+      />
+
+      {/* Project Creation & Editing Modal */}
+      <ProjectFormModal
+        isOpen={isProjectFormOpen}
+        projectToEdit={editingProject}
+        onClose={() => {
+          setIsProjectFormOpen(false);
+          setEditingProject(null);
+        }}
+        onSave={async (data) => {
+          if (editingProject) {
+            await handleSaveProject({ ...data, id: editingProject.id });
+          } else {
+            await handleSaveProject(data);
+          }
+        }}
+      />
+
+      {/* Project Case Study Deep-Dive Modal */}
+      <ProjectCaseStudyModal
+        project={selectedCaseStudy}
+        onClose={() => setSelectedCaseStudy(null)}
       />
 
       {/* Client Inquiries Drawer / Modal */}

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Database, Server, Shield, Cloud, Terminal, Check, Copy } from 'lucide-react';
 
 interface BackendDocsModalProps {
@@ -11,6 +12,17 @@ export const BackendDocsModal: React.FC<BackendDocsModalProps> = ({
   onClose,
 }) => {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -68,12 +80,15 @@ service cloud.firestore {
   }
 }`;
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="backend-docs-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto"
     >
       <div className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-[#0A0E1A] border border-[#3A4A63] rounded-2xl shadow-2xl p-6 sm:p-8 text-[#F2F5FA]">
         {/* Close Button */}
@@ -205,6 +220,7 @@ service cloud.firestore {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

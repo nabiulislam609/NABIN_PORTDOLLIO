@@ -18,43 +18,37 @@ export const Hero: React.FC<HeroProps> = ({
       id="home"
       className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
     >
-      {/* Background Image with Cinematic Dark Gradient Overlay */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Image with High Visibility and Refined Cinematic Vignette */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <img
           src={profile.heroImage}
-          alt="Digital Marketing Workspace & Analytics Dashboard"
+          alt="Hero Background Banner"
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover object-center opacity-25 scale-105 transform motion-safe:transition-transform duration-1000"
+          className="w-full h-full object-cover object-center scale-105 transform motion-safe:transition-transform duration-1000"
+          style={{
+            opacity: (profile.heroImageOpacity !== undefined ? profile.heroImageOpacity : 80) / 100,
+          }}
         />
-        {/* Cinematic Multi-stop Gradient: Deep navy-black on left, dark slate blue in center, cool gray-blue on right */}
+        {/* Soft center text-scrim so graphics, charts & portrait remain vibrant and clearly visible */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle at 50% 30%, rgba(26, 36, 56, 0.75) 0%, rgba(10, 14, 26, 0.95) 75%, #0A0E1A 100%)',
+              'radial-gradient(ellipse at 50% 45%, rgba(10, 14, 26, 0.40) 0%, rgba(10, 14, 26, 0.15) 50%, rgba(10, 14, 26, 0.65) 100%)',
           }}
         />
-        <div
-          className="absolute inset-0 opacity-60"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(10, 14, 26, 0.92) 0%, rgba(26, 36, 56, 0.8) 45%, rgba(58, 74, 99, 0.4) 100%)',
-          }}
-        />
-        {/* Subtle grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: `radial-gradient(#B8C6DC 1px, transparent 1px)`,
-            backgroundSize: '32px 32px',
-          }}
-        />
+        {/* Subtle ambient tint to keep harmonious dark contrast */}
+        <div className="absolute inset-0 bg-[#0A0E1A]/30 backdrop-blur-[0.5px]" />
+        {/* Smooth top gradient for navbar contrast */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0A0E1A]/90 via-[#0A0E1A]/40 to-transparent" />
+        {/* Smooth bottom fade into about section */}
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#0A0E1A] via-[#0A0E1A]/70 to-transparent" />
       </div>
 
       {/* Content Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
         {/* Credibility Tag */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A2438]/80 border border-[#3A4A63]/70 backdrop-blur-md shadow-sm mb-6 animate-fade-in">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A2438]/90 border border-[#3A4A63]/80 backdrop-blur-md shadow-md mb-6 animate-fade-in">
           <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
           <span className="text-xs font-semibold tracking-wide uppercase text-[#B8C6DC]">
             Data-Driven Performance Marketing
@@ -62,20 +56,20 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Personal Name */}
-        <h2 className="text-sm sm:text-base font-semibold tracking-wider text-[#AAB8CE] uppercase mb-2">
+        <h2 className="text-sm sm:text-base font-semibold tracking-wider text-[#B8C6DC] uppercase mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
           {profile.name}
         </h2>
 
         {/* Main Headline & Professional Title */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#F2F5FA] max-w-4xl leading-[1.15] mb-6">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#F2F5FA] max-w-4xl leading-[1.15] mb-6 drop-shadow-[0_4px_14px_rgba(0,0,0,0.9)]">
           <span className="block">{profile.title.split('|')[0]?.trim()}</span>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B8C6DC] via-[#AAB8CE] to-[#F2F5FA] block text-2xl sm:text-4xl md:text-5xl mt-2 font-bold">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D6E0F0] via-[#B8C6DC] to-[#FFFFFF] block text-2xl sm:text-4xl md:text-5xl mt-2 font-bold">
             {profile.title.split('|')[1]?.trim() || 'Paid Advertising & SEO Specialist'}
           </span>
         </h1>
 
         {/* Short Description */}
-        <p className="text-base sm:text-lg md:text-xl text-[#AAB8CE] max-w-2xl leading-relaxed mb-10 font-normal">
+        <p className="text-base sm:text-lg md:text-xl text-[#D6E0F0] max-w-2xl leading-relaxed mb-10 font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
           {profile.heroDescription}
         </p>
 
@@ -101,10 +95,10 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Metric / Stat Pillars */}
         <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl text-left">
-          <div className="p-4 rounded-xl bg-[#1A2438]/60 backdrop-blur-md border border-[#232E45] hover:border-[#3A4A63] transition-colors">
+          <div className="p-4 rounded-xl bg-[#0A0E1A]/85 backdrop-blur-lg border border-[#232E45] hover:border-[#3A4A63] shadow-lg shadow-black/40 transition-colors">
             <div className="flex items-center gap-2 text-cyan-400 mb-1">
               <Award className="w-4 h-4" />
-              <span className="text-xs text-[#AAB8CE] font-medium">Experience</span>
+              <span className="text-xs text-[#B8C6DC] font-medium">Experience</span>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-[#F2F5FA]">
               {profile.stats.yearsExperience}
@@ -112,10 +106,10 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="text-[11px] text-[#AAB8CE] mt-0.5">Industry Practice</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#1A2438]/60 backdrop-blur-md border border-[#232E45] hover:border-[#3A4A63] transition-colors">
+          <div className="p-4 rounded-xl bg-[#0A0E1A]/85 backdrop-blur-lg border border-[#232E45] hover:border-[#3A4A63] shadow-lg shadow-black/40 transition-colors">
             <div className="flex items-center gap-2 text-emerald-400 mb-1">
               <DollarSign className="w-4 h-4" />
-              <span className="text-xs text-[#AAB8CE] font-medium">Ad Spend</span>
+              <span className="text-xs text-[#B8C6DC] font-medium">Ad Spend</span>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-[#F2F5FA]">
               {profile.stats.adSpendManaged}
@@ -123,10 +117,10 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="text-[11px] text-[#AAB8CE] mt-0.5">Profitable Management</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#1A2438]/60 backdrop-blur-md border border-[#232E45] hover:border-[#3A4A63] transition-colors">
+          <div className="p-4 rounded-xl bg-[#0A0E1A]/85 backdrop-blur-lg border border-[#232E45] hover:border-[#3A4A63] shadow-lg shadow-black/40 transition-colors">
             <div className="flex items-center gap-2 text-amber-400 mb-1">
               <TrendingUp className="w-4 h-4" />
-              <span className="text-xs text-[#AAB8CE] font-medium">Average ROI</span>
+              <span className="text-xs text-[#B8C6DC] font-medium">Average ROI</span>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-[#F2F5FA]">
               {profile.stats.avgRoi}
@@ -134,10 +128,10 @@ export const Hero: React.FC<HeroProps> = ({
             <div className="text-[11px] text-[#AAB8CE] mt-0.5">Targeted Campaigns</div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#1A2438]/60 backdrop-blur-md border border-[#232E45] hover:border-[#3A4A63] transition-colors">
+          <div className="p-4 rounded-xl bg-[#0A0E1A]/85 backdrop-blur-lg border border-[#232E45] hover:border-[#3A4A63] shadow-lg shadow-black/40 transition-colors">
             <div className="flex items-center gap-2 text-purple-400 mb-1">
               <Target className="w-4 h-4" />
-              <span className="text-xs text-[#AAB8CE] font-medium">Success Rate</span>
+              <span className="text-xs text-[#B8C6DC] font-medium">Success Rate</span>
             </div>
             <div className="text-xl sm:text-2xl font-bold text-[#F2F5FA]">
               {profile.stats.completedProjects}

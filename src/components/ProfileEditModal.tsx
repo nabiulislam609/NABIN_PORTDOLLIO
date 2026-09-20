@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Save, User, Image, Mail, Phone, MapPin, Globe, Lock, Check, AlertCircle, CheckCircle2, Upload, Trash2, Camera } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 import { processImageFile } from '../utils/imageUtils.ts';
@@ -69,6 +70,17 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
     setProfileSuccess(null);
   }, [profile, isOpen]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
@@ -104,12 +116,15 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
     }
   };
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="profile-edit-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in overflow-y-auto"
     >
       <div className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-[#0A0E1A] border border-[#3A4A63] rounded-2xl shadow-2xl p-6 sm:p-8 text-[#F2F5FA]">
         {/* Close Button */}
@@ -432,6 +447,35 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
                   className="w-full px-3 py-1.5 rounded-lg bg-[#1A2438] border border-[#232E45] text-xs text-white placeholder-[#5A6D88] focus:outline-none focus:border-cyan-400"
                 />
+
+                {/* Hero Background Visibility & Opacity Slider */}
+                <div className="mt-3 pt-2.5 border-t border-[#232E45]/80">
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <span className="font-semibold text-[#B8C6DC]">Hero Image Visibility</span>
+                    <span className="font-bold text-cyan-400 font-mono">
+                      {formData.heroImageOpacity ?? 80}%
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="20"
+                    max="100"
+                    step="5"
+                    value={formData.heroImageOpacity ?? 80}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        heroImageOpacity: parseInt(e.target.value, 10),
+                      })
+                    }
+                    className="w-full accent-cyan-400 cursor-pointer h-2 bg-[#1A2438] rounded-lg"
+                  />
+                  <div className="flex justify-between text-[10px] text-[#AAB8CE] mt-1">
+                    <span>Subtle (20%)</span>
+                    <span>Vibrant (80%)</span>
+                    <span>Full Brightness (100%)</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -600,6 +644,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

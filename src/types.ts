@@ -24,6 +24,7 @@ export interface ProfileConfig {
   mainStrengths: string[];
   careerFocus: string;
   heroImage: string;
+  heroImageOpacity?: number;
   profileImage: string;
   email: string;
   phone: string;

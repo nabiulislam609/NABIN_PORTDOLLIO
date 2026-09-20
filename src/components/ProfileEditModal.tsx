@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, User, Image, Mail, Phone, MapPin, Globe, Lock, Check } from 'lucide-react';
+import { X, Save, User, Image, Mail, Phone, MapPin, Globe, Lock, Check, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 
 interface ProfileEditModalProps {
@@ -21,10 +21,14 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
   const [formData, setFormData] = useState<ProfileConfig>(profile);
   const [newPassword, setNewPassword] = useState('');
   const [passwordMsg, setPasswordMsg] = useState<string | null>(null);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setFormData(profile);
+    setProfileError(null);
+    setProfileSuccess(null);
   }, [profile, isOpen]);
 
   if (!isOpen) return null;
@@ -32,11 +36,16 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    setProfileError(null);
+    setProfileSuccess(null);
     try {
       await onSaveProfile(formData);
-      onClose();
+      setProfileSuccess('Profile updated and saved successfully!');
+      setTimeout(() => {
+        onClose();
+      }, 700);
     } catch (err: any) {
-      alert(err?.message || 'Failed to save profile');
+      setProfileError(err?.message || 'Failed to save profile. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -115,6 +124,20 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
         {activeTab === 'profile' ? (
           <form onSubmit={handleProfileSubmit} className="space-y-5">
+            {profileError && (
+              <div className="flex items-center gap-2 p-3.5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs font-medium">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                <span>{profileError}</span>
+              </div>
+            )}
+
+            {profileSuccess && (
+              <div className="flex items-center gap-2 p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs font-medium">
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                <span>{profileSuccess}</span>
+              </div>
+            )}
+
             {/* Name & Title */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

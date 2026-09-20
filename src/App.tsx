@@ -15,6 +15,18 @@ import { InquiriesModal } from './components/InquiriesModal.tsx';
 import { BackendDocsModal } from './components/BackendDocsModal.tsx';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.ts';
 import { ProfileConfig, Project, ContactMessage } from './types.ts';
+import {
+  apiGetProfile,
+  apiSaveProfile,
+  apiGetProjects,
+  apiSaveProject,
+  apiDeleteProject,
+  apiResetProjects,
+  apiGetInquiries,
+  apiDeleteInquiry,
+  apiVerifyToken,
+  apiChangePassword,
+} from './services/apiService.ts';
 
 export default function App() {
   const [profile, setProfile] = useState<ProfileConfig>(DEFAULT_PROFILE);
@@ -33,11 +45,8 @@ export default function App() {
   // Initial Data Fetching
   const fetchProfile = useCallback(async () => {
     try {
-      const res = await fetch('/api/profile');
-      if (res.ok) {
-        const data = await res.json();
-        setProfile(data);
-      }
+      const data = await apiGetProfile();
+      setProfile(data);
     } catch (e) {
       console.warn('Using local default profile:', e);
     }
@@ -45,12 +54,9 @@ export default function App() {
 
   const fetchProjects = useCallback(async () => {
     try {
-      const res = await fetch('/api/projects');
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setProjects(data);
-        }
+      const data = await apiGetProjects();
+      if (Array.isArray(data) && data.length > 0) {
+        setProjects(data);
       }
     } catch (e) {
       console.warn('Using local default projects:', e);
@@ -59,13 +65,8 @@ export default function App() {
 
   const fetchInquiries = useCallback(async (token: string) => {
     try {
-      const res = await fetch('/api/contact/messages', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setInquiries(data);
-      }
+      const data = await apiGetInquiries(token);
+      setInquiries(data);
     } catch (e) {
       console.error('Error fetching inquiries:', e);
     }
@@ -78,22 +79,15 @@ export default function App() {
 
     const savedToken = localStorage.getItem('portfolio_admin_token');
     if (savedToken) {
-      fetch('/api/auth/verify', {
-        headers: { Authorization: `Bearer ${savedToken}` },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.authenticated) {
-            setIsAdmin(true);
-            setAdminToken(savedToken);
-            fetchInquiries(savedToken);
-          } else {
-            localStorage.removeItem('portfolio_admin_token');
-          }
-        })
-        .catch(() => {
+      apiVerifyToken(savedToken).then((authenticated) => {
+        if (authenticated) {
+          setIsAdmin(true);
+          setAdminToken(savedToken);
+          fetchInquiries(savedToken);
+        } else {
           localStorage.removeItem('portfolio_admin_token');
-        });
+        }
+      });
     }
   }, [fetchProfile, fetchProjects, fetchInquiries]);
 
@@ -101,7 +95,6 @@ export default function App() {
   const handleLoginSuccess = (token: string) => {
     setIsAdmin(true);
     setAdminToken(token);
-    localStorage.setItem('portfolio_admin_token', token);
     fetchInquiries(token);
   };
 
@@ -118,25 +111,8 @@ export default function App() {
       return;
     }
 
-    const isEdit = Boolean(projectData.id);
-    const url = isEdit ? `/api/projects/${projectData.id}` : '/api/projects';
-    const method = isEdit ? 'PUT' : 'POST';
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminToken}`,
-      },
-      body: JSON.stringify(projectData),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to save project');
-    }
-
-    await fetchProjects();
+    const updated = await apiSaveProject(adminToken, projectData);
+    setProjects(updated);
   };
 
   const handleDeleteProject = async (id: string) => {
@@ -145,29 +121,15 @@ export default function App() {
       return;
     }
 
-    const res = await fetch(`/api/projects/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-
-    if (!res.ok) {
-      alert('Failed to delete project');
-      return;
-    }
-
-    await fetchProjects();
+    const updated = await apiDeleteProject(adminToken, id);
+    setProjects(updated);
   };
 
   const handleResetProjects = async () => {
     if (!adminToken) return;
     if (confirm('Reset portfolio to original default curated case studies?')) {
-      const res = await fetch('/api/projects/reset', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${adminToken}` },
-      });
-      if (res.ok) {
-        await fetchProjects();
-      }
+      const resetList = await apiResetProjects(adminToken);
+      setProjects(resetList);
     }
   };
 
@@ -178,49 +140,24 @@ export default function App() {
       return;
     }
 
-    const res = await fetch('/api/profile', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminToken}`,
-      },
-      body: JSON.stringify(updatedProfile),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to save profile');
-    }
-
-    setProfile(updatedProfile);
+    const saved = await apiSaveProfile(adminToken, updatedProfile);
+    setProfile(saved);
   };
 
   // Password Change Handler
   const handleChangePassword = async (newPassword: string) => {
     if (!adminToken) return;
-    const res = await fetch('/api/auth/change-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminToken}`,
-      },
-      body: JSON.stringify({ newPassword }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to update password');
+    const res = await apiChangePassword(adminToken, newPassword);
+    if (!res.success) {
+      throw new Error(res.error || 'Failed to update password');
     }
   };
 
   // Inquiry Delete Handler
   const handleDeleteMessage = async (id: string) => {
     if (!adminToken) return;
-    await fetch(`/api/contact/messages/${id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    setInquiries((prev) => prev.filter((m) => m.id !== id));
+    const updated = await apiDeleteInquiry(adminToken, id);
+    setInquiries(updated);
   };
 
   // Smooth scroll helpers

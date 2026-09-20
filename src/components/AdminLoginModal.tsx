@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Lock, ShieldCheck, Key, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { apiLogin } from '../services/apiService.ts';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
@@ -30,19 +31,13 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
       setIsSubmitting(true);
       setError(null);
 
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
+      const res = await apiLogin(password);
 
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Invalid admin credentials');
+      if (!res.success || !res.token) {
+        throw new Error(res.error || 'Invalid admin credentials');
       }
 
-      onLoginSuccess(data.token);
+      onLoginSuccess(res.token);
       onClose();
     } catch (err: any) {
       setError(err?.message || 'Authentication failed');

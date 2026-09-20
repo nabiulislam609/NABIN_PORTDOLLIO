@@ -15,6 +15,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
+import { apiSubmitContact } from '../services/apiService.ts';
 
 interface ContactProps {
   profile: ProfileConfig;
@@ -53,24 +54,18 @@ export const Contact: React.FC<ContactProps> = ({ profile, prefilledSubject = ''
       setIsSubmitting(true);
       setErrorMsg(null);
 
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          subject: subject.trim(),
-          message: message.trim(),
-        }),
+      const res = await apiSubmitContact({
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject.trim(),
+        message: message.trim(),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to deliver message.');
+      if (!res.success) {
+        throw new Error(res.error || 'Failed to deliver message.');
       }
 
-      setSuccessMsg(data.message || 'Thank you! Your message has been received.');
+      setSuccessMsg(res.message || 'Thank you! Your message has been received.');
       setName('');
       setEmail('');
       setSubject('');

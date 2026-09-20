@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FloatingBubbles } from './components/FloatingBubbles.tsx';
 import { MouseGlow } from './components/MouseGlow.tsx';
+import { MouseBubble } from './components/MouseBubble.tsx';
+import { WaterRipples } from './components/WaterRipples.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { Hero } from './components/Hero.tsx';
 import { About } from './components/About.tsx';
@@ -211,9 +213,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0A0E1A] text-[#F2F5FA] relative selection:bg-[#3A4A63] selection:text-white">
-      {/* Background Ambience: Floating Bubbles & Dynamic Mouse Glow */}
+      {/* Background Ambience: Floating Bubbles, Dynamic Mouse Glow, Mouse Bubble Cursor & Water Ripples */}
       <FloatingBubbles />
       <MouseGlow />
+      <MouseBubble />
+      <WaterRipples />
 
       {/* Primary Sticky Navigation Bar */}
       <Navbar

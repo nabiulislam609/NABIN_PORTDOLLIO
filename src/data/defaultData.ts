@@ -1,7 +1,7 @@
 import { ProfileConfig, Project, ServiceItem } from '../types.ts';
 
 export const DEFAULT_PROFILE: ProfileConfig = {
-  name: 'Alex Vance',
+  name: 'NABIUL ISLAM',
   title: 'Digital Marketer | SEO & Paid Advertising Specialist',
   heroDescription:
     'I help businesses improve their online visibility, reach the right audience, and achieve measurable growth through effective digital marketing strategies.',
@@ -23,7 +23,7 @@ export const DEFAULT_PROFILE: ProfileConfig = {
     'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1800&auto=format&fit=crop',
   profileImage:
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=900&auto=format&fit=crop',
-  email: 'contact@alexvance.marketing',
+  email: 'contact@nabiulislam.marketing',
   phone: '+880 1712 345678',
   whatsapp: '+8801712345678',
   location: 'Dhaka, Bangladesh',

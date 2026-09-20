@@ -72,7 +72,7 @@ export default function App() {
     }
   }, []);
 
-  // Check saved admin token on boot
+  // Check saved admin token on boot & set up secret admin shortcuts
   useEffect(() => {
     fetchProfile();
     fetchProjects();
@@ -89,6 +89,31 @@ export default function App() {
         }
       });
     }
+
+    // Check if opened with #admin or ?admin
+    const checkAdminIntent = () => {
+      const hash = window.location.hash.toLowerCase();
+      const search = window.location.search.toLowerCase();
+      if (hash === '#admin' || hash === '#login' || search.includes('admin') || search.includes('login')) {
+        setIsAdminLoginOpen(true);
+      }
+    };
+    checkAdminIntent();
+    window.addEventListener('hashchange', checkAdminIntent);
+
+    // Keyboard shortcut for owner: Ctrl + Shift + A or Cmd + Shift + A
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        setIsAdminLoginOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('hashchange', checkAdminIntent);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [fetchProfile, fetchProjects, fetchInquiries]);
 
   // Auth Handlers

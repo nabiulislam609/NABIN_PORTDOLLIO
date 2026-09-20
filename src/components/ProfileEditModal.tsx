@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, Save, User, Image, Mail, Phone, MapPin, Globe, Lock, Check, AlertCircle, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Save, User, Image, Mail, Phone, MapPin, Globe, Lock, Check, AlertCircle, CheckCircle2, Upload, Trash2, Camera } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
+import { processImageFile } from '../utils/imageUtils.ts';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -24,6 +25,43 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
   const [profileError, setProfileError] = useState<string | null>(null);
   const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingProfile, setIsUploadingProfile] = useState(false);
+  const [isUploadingHero, setIsUploadingHero] = useState(false);
+  const [profileDragOver, setProfileDragOver] = useState(false);
+  const [heroDragOver, setHeroDragOver] = useState(false);
+
+  const profileFileInputRef = useRef<HTMLInputElement>(null);
+  const heroFileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleProfileFileSelect = async (file: File) => {
+    try {
+      setIsUploadingProfile(true);
+      setProfileError(null);
+      const dataUrl = await processImageFile(file, 1200, 0.88);
+      setFormData((prev) => ({ ...prev, profileImage: dataUrl }));
+      setProfileSuccess('Profile photo uploaded from computer!');
+      setTimeout(() => setProfileSuccess(null), 3000);
+    } catch (err: any) {
+      setProfileError(err?.message || 'Failed to process image file');
+    } finally {
+      setIsUploadingProfile(false);
+    }
+  };
+
+  const handleHeroFileSelect = async (file: File) => {
+    try {
+      setIsUploadingHero(true);
+      setProfileError(null);
+      const dataUrl = await processImageFile(file, 1600, 0.85);
+      setFormData((prev) => ({ ...prev, heroImage: dataUrl }));
+      setProfileSuccess('Hero background photo uploaded from computer!');
+      setTimeout(() => setProfileSuccess(null), 3000);
+    } catch (err: any) {
+      setProfileError(err?.message || 'Failed to process image file');
+    } finally {
+      setIsUploadingHero(false);
+    }
+  };
 
   useEffect(() => {
     setFormData(profile);
@@ -206,29 +244,193 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
               />
             </div>
 
-            {/* Image URLs */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#B8C6DC] mb-1">
-                  Profile Portrait Image URL
-                </label>
+            {/* Image Upload & URLs */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Profile Portrait Image */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setProfileDragOver(true);
+                }}
+                onDragLeave={() => setProfileDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setProfileDragOver(false);
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) handleProfileFileSelect(file);
+                }}
+                className={`p-3.5 rounded-xl border transition-all ${
+                  profileDragOver
+                    ? 'border-cyan-400 bg-cyan-950/20'
+                    : 'border-[#232E45] bg-[#121826]'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#B8C6DC]">
+                    Profile Portrait Image
+                  </label>
+                  <span className="text-[10px] text-cyan-400 font-medium">Desktop file or URL</span>
+                </div>
+
+                <div className="flex items-center gap-3 mb-2.5">
+                  {/* Thumbnail Preview */}
+                  <div className="w-14 h-14 shrink-0 rounded-xl overflow-hidden bg-[#1A2438] border border-[#232E45] flex items-center justify-center relative group">
+                    {formData.profileImage ? (
+                      <img
+                        src={formData.profileImage}
+                        alt="Profile"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <User className="w-6 h-6 text-[#AAB8CE]" />
+                    )}
+                  </div>
+
+                  {/* Upload button from desktop */}
+                  <div className="flex-1 flex flex-col gap-1.5">
+                    <label
+                      className={`w-full py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm ${
+                        isUploadingProfile
+                          ? 'bg-[#232E45] text-[#AAB8CE]'
+                          : 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white'
+                      }`}
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{isUploadingProfile ? 'Processing...' : 'Upload Photo from Desktop'}</span>
+                      <input
+                        ref={profileFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        disabled={isUploadingProfile}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleProfileFileSelect(file);
+                          if (e.target) e.target.value = '';
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <div className="text-[10px] text-[#AAB8CE] flex items-center justify-between">
+                      <span>PNG, JPG, WEBP or GIF</span>
+                      {formData.profileImage && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, profileImage: '' })}
+                          className="text-rose-400 hover:text-rose-300 transition-colors flex items-center gap-1"
+                        >
+                          <Trash2 className="w-2.5 h-2.5" /> Clear
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Optional direct URL input */}
                 <input
-                  type="url"
+                  type="text"
+                  placeholder="Or paste image web link..."
                   value={formData.profileImage}
                   onChange={(e) => setFormData({ ...formData, profileImage: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#1A2438] border border-[#232E45] text-sm text-white focus:outline-none focus:border-cyan-400"
+                  className="w-full px-3 py-1.5 rounded-lg bg-[#1A2438] border border-[#232E45] text-xs text-white placeholder-[#5A6D88] focus:outline-none focus:border-cyan-400"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#B8C6DC] mb-1">
-                  Hero Background Image URL
-                </label>
+              {/* Hero Background Image */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setHeroDragOver(true);
+                }}
+                onDragLeave={() => setHeroDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setHeroDragOver(false);
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) handleHeroFileSelect(file);
+                }}
+                className={`p-3.5 rounded-xl border transition-all ${
+                  heroDragOver
+                    ? 'border-cyan-400 bg-cyan-950/20'
+                    : 'border-[#232E45] bg-[#121826]'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#B8C6DC]">
+                    Hero Background Image
+                  </label>
+                  <span className="text-[10px] text-cyan-400 font-medium">Desktop file or URL</span>
+                </div>
+
+                <div className="flex items-center gap-3 mb-2.5">
+                  {/* Thumbnail Preview */}
+                  <div className="w-20 h-14 shrink-0 rounded-xl overflow-hidden bg-[#1A2438] border border-[#232E45] flex items-center justify-center relative group">
+                    {formData.heroImage ? (
+                      <img
+                        src={formData.heroImage}
+                        alt="Hero background"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <Image className="w-6 h-6 text-[#AAB8CE]" />
+                    )}
+                  </div>
+
+                  {/* Upload button from desktop */}
+                  <div className="flex-1 flex flex-col gap-1.5">
+                    <label
+                      className={`w-full py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-sm ${
+                        isUploadingHero
+                          ? 'bg-[#232E45] text-[#AAB8CE]'
+                          : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white'
+                      }`}
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{isUploadingHero ? 'Processing...' : 'Upload Photo from Desktop'}</span>
+                      <input
+                        ref={heroFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        disabled={isUploadingHero}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleHeroFileSelect(file);
+                          if (e.target) e.target.value = '';
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <div className="text-[10px] text-[#AAB8CE] flex items-center justify-between">
+                      <span>PNG, JPG, WEBP or GIF</span>
+                      {formData.heroImage && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, heroImage: '' })}
+                          className="text-rose-400 hover:text-rose-300 transition-colors flex items-center gap-1"
+                        >
+                          <Trash2 className="w-2.5 h-2.5" /> Clear
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Optional direct URL input */}
                 <input
-                  type="url"
+                  type="text"
+                  placeholder="Or paste hero background web link..."
                   value={formData.heroImage}
                   onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#1A2438] border border-[#232E45] text-sm text-white focus:outline-none focus:border-cyan-400"
+                  className="w-full px-3 py-1.5 rounded-lg bg-[#1A2438] border border-[#232E45] text-xs text-white placeholder-[#5A6D88] focus:outline-none focus:border-cyan-400"
                 />
               </div>
             </div>

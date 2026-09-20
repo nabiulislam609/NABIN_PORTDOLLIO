@@ -95,26 +95,28 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <span>View Project</span>
           </button>
 
-          {/* Edit / Delete Buttons */}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => (isAdmin ? onEdit(project) : onRequestAdmin())}
-              title={isAdmin ? 'Edit Project' : 'Admin Login Required to Edit'}
-              className="p-1.5 rounded-lg text-[#AAB8CE] hover:text-white hover:bg-[#232E45] transition-colors"
-              aria-label={`Edit ${project.title}`}
-            >
-              <Edit3 className="w-3.5 h-3.5" />
-            </button>
+          {/* Edit / Delete Buttons (only visible to logged in admin) */}
+          {isAdmin && (
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => onEdit(project)}
+                title="Edit Project"
+                className="p-1.5 rounded-lg text-[#AAB8CE] hover:text-white hover:bg-[#232E45] transition-colors"
+                aria-label={`Edit ${project.title}`}
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+              </button>
 
-            <button
-              onClick={() => (isAdmin ? onDelete(project.id, project.title) : onRequestAdmin())}
-              title={isAdmin ? 'Delete Project' : 'Admin Login Required to Delete'}
-              className="p-1.5 rounded-lg text-rose-400 hover:text-rose-200 hover:bg-rose-950/40 transition-colors"
-              aria-label={`Delete ${project.title}`}
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
+              <button
+                onClick={() => onDelete(project.id, project.title)}
+                title="Delete Project"
+                className="p-1.5 rounded-lg text-rose-400 hover:text-rose-200 hover:bg-rose-950/40 transition-colors"
+                aria-label={`Delete ${project.title}`}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

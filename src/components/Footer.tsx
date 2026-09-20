@@ -9,7 +9,7 @@ import {
   MapPin,
   Mail,
   Phone,
-  Shield,
+  Lock,
 } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 
@@ -175,29 +175,23 @@ export const Footer: React.FC<FooterProps> = ({
                 <span>{profile.phone}</span>
               </div>
             </div>
-
-            <div className="pt-2 flex items-center gap-3">
-              <button
-                onClick={onOpenAdminLogin}
-                className="text-xs text-[#B8C6DC] hover:text-white flex items-center gap-1.5 transition-colors"
-              >
-                <Shield className="w-3 h-3 text-emerald-400" />
-                <span>Admin Login</span>
-              </button>
-              <span className="text-[#232E45]">|</span>
-              <button
-                onClick={onOpenBackendDocs}
-                className="text-xs text-[#B8C6DC] hover:text-white transition-colors"
-              >
-                DB Architecture
-              </button>
-            </div>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#AAB8CE]">
-          <p>© {currentYear} {profile.name}. All Rights Reserved.</p>
+          <div className="flex items-center gap-2">
+            <p>© {currentYear} {profile.name}. All Rights Reserved.</p>
+            {/* Subtle discreet touchpoint for owner login without visual clutter for visitors */}
+            <button
+              onClick={onOpenAdminLogin}
+              title="Admin access"
+              className="opacity-20 hover:opacity-100 transition-opacity p-1 text-[#AAB8CE] hover:text-cyan-400 focus:outline-none"
+              aria-label="Owner portal access"
+            >
+              <Lock className="w-3 h-3" />
+            </button>
+          </div>
 
           <button
             onClick={scrollToTop}

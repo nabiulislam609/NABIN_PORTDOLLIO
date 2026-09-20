@@ -94,9 +94,9 @@ export const Portfolio: React.FC<PortfolioProps> = ({
             </p>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-3 shrink-0">
-            {isAdmin && (
+          {/* Action buttons (only visible when logged in as admin) */}
+          {isAdmin && (
+            <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={onResetProjects}
                 title="Restore default curated sample projects"
@@ -105,17 +105,17 @@ export const Portfolio: React.FC<PortfolioProps> = ({
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Defaults</span>
               </button>
-            )}
 
-            <button
-              onClick={handleOpenAdd}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-emerald-950/40 flex items-center gap-2 transition-all"
-              id="portfolio-add-project-btn"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Add New Project</span>
-            </button>
-          </div>
+              <button
+                onClick={handleOpenAdd}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-emerald-950/40 flex items-center gap-2 transition-all"
+                id="portfolio-add-project-btn"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>Add New Project</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Category Filters */}

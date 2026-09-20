@@ -72,6 +72,21 @@ export const Navbar: React.FC<NavbarProps> = ({
     }
   };
 
+  const [logoClicks, setLogoClicks] = useState(0);
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Secret shortcut: triple click logo within 2 seconds to open admin login
+    const newCount = logoClicks + 1;
+    setLogoClicks(newCount);
+    if (newCount >= 3) {
+      setLogoClicks(0);
+      onOpenAdminLogin();
+      return;
+    }
+    setTimeout(() => setLogoClicks(0), 2000);
+    handleNavClick(e, '#home');
+  };
+
   return (
     <header
       id="main-navbar"
@@ -85,9 +100,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand Identity / Logo */}
         <a
           href="#home"
-          onClick={(e) => handleNavClick(e, '#home')}
-          className="flex items-center gap-3 group focus:outline-none"
+          onClick={handleLogoClick}
+          className="flex items-center gap-3 group focus:outline-none cursor-pointer"
           id="nav-logo"
+          title={isAdmin ? 'Admin Active' : profile.name}
         >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#3A4A63] to-[#1A2438] border border-[#B8C6DC]/30 flex items-center justify-center text-[#F2F5FA] font-bold text-lg shadow-md group-hover:border-[#B8C6DC]/60 transition-colors">
             {profile.name.charAt(0)}
@@ -129,37 +145,29 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right CTA & Admin Buttons */}
         <div className="hidden lg:flex items-center gap-3">
-          <button
-            onClick={onOpenBackendDocs}
-            title="Database Architecture & API Docs"
-            className="p-2 text-xs font-medium text-[#AAB8CE] hover:text-[#F2F5FA] hover:bg-[#1A2438] border border-transparent hover:border-[#232E45] rounded-lg transition-colors flex items-center gap-1.5"
-            id="nav-db-docs-btn"
-          >
-            <Database className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden xl:inline">Architecture</span>
-          </button>
+          {isAdmin && (
+            <>
+              <button
+                onClick={onOpenBackendDocs}
+                title="Database Architecture & API Docs"
+                className="p-2 text-xs font-medium text-[#AAB8CE] hover:text-[#F2F5FA] hover:bg-[#1A2438] border border-transparent hover:border-[#232E45] rounded-lg transition-colors flex items-center gap-1.5"
+                id="nav-db-docs-btn"
+              >
+                <Database className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden xl:inline">Architecture</span>
+              </button>
 
-          <button
-            onClick={onOpenAdminLogin}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 flex items-center gap-1.5 ${
-              isAdmin
-                ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300'
-                : 'bg-[#1A2438]/60 border-[#232E45] text-[#AAB8CE] hover:text-[#F2F5FA] hover:border-[#3A4A63]'
-            }`}
-            id="nav-admin-toggle-btn"
-          >
-            {isAdmin ? (
-              <>
+              <button
+                onClick={onOpenAdminLogin}
+                className="px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 flex items-center gap-1.5 bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/50"
+                id="nav-admin-toggle-btn"
+                title="Admin session active"
+              >
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Admin Active</span>
-              </>
-            ) : (
-              <>
-                <Shield className="w-3.5 h-3.5 text-[#B8C6DC]" />
-                <span>Admin Portal</span>
-              </>
-            )}
-          </button>
+              </button>
+            </>
+          )}
 
           <a
             href="#contact"
@@ -174,18 +182,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Hamburger Toggle */}
         <div className="flex items-center gap-2 md:hidden">
-          <button
-            onClick={onOpenAdminLogin}
-            className="p-2 text-[#AAB8CE] hover:text-white rounded-lg bg-[#1A2438]/60 border border-[#232E45]"
-            title="Admin Login"
-            aria-label="Admin Login"
-          >
-            {isAdmin ? (
+          {isAdmin && (
+            <button
+              onClick={onOpenAdminLogin}
+              className="p-2 text-emerald-300 rounded-lg bg-emerald-950/40 border border-emerald-500/40"
+              title="Admin Active"
+              aria-label="Admin Active"
+            >
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            ) : (
-              <Shield className="w-4 h-4 text-[#B8C6DC]" />
-            )}
-          </button>
+            </button>
+          )}
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -227,19 +233,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               );
             })}
             <div className="pt-3 mt-2 border-t border-[#232E45] flex flex-col gap-2.5">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenBackendDocs();
-                }}
-                className="w-full text-left px-4 py-2 rounded-xl text-xs font-medium text-[#AAB8CE] bg-[#1A2438]/50 border border-[#232E45] flex items-center justify-between"
-              >
-                <span className="flex items-center gap-2">
-                  <Database className="w-4 h-4 text-cyan-400" />
-                  Database & API Schema
-                </span>
-                <span className="text-[10px] text-cyan-300">View Docs</span>
-              </button>
+              {isAdmin && (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenBackendDocs();
+                  }}
+                  className="w-full text-left px-4 py-2 rounded-xl text-xs font-medium text-[#AAB8CE] bg-[#1A2438]/50 border border-[#232E45] flex items-center justify-between"
+                >
+                  <span className="flex items-center gap-2">
+                    <Database className="w-4 h-4 text-cyan-400" />
+                    Database & API Schema
+                  </span>
+                  <span className="text-[10px] text-cyan-300">View Docs</span>
+                </button>
+              )}
 
               <a
                 href="#contact"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, Upload, Image as ImageIcon, Save, AlertCircle } from 'lucide-react';
+import { X, Upload, Image as ImageIcon, Save, AlertCircle, Trash2 } from 'lucide-react';
 import { Project } from '../types.ts';
+import { processImageFile } from '../utils/imageUtils.ts';
 
 interface ProjectFormModalProps {
   isOpen: boolean;
@@ -88,21 +89,17 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Handle local file upload
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle local file upload from desktop
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        setError('Image file size must be less than 8MB');
-        return;
+      try {
+        setError(null);
+        const dataUrl = await processImageFile(file, 1600, 0.85);
+        setImage(dataUrl);
+      } catch (err: any) {
+        setError(err?.message || 'Failed to process image file');
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          setImage(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -228,21 +225,24 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
           </div>
 
           {/* Row 2: Image URL & Upload */}
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#B8C6DC] mb-1.5">
-              Project Image (URL or Upload)
-            </label>
+          <div className="p-3.5 rounded-xl border border-[#232E45] bg-[#121826]">
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#B8C6DC]">
+                Project Cover Image
+              </label>
+              <span className="text-[10px] text-cyan-400 font-medium">Desktop file or URL</span>
+            </div>
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <input
-                type="url"
+                type="text"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
-                placeholder="https://images.unsplash.com/..."
+                placeholder="Paste web URL or upload from your computer..."
                 className="w-full sm:flex-1 px-4 py-2.5 rounded-xl bg-[#1A2438] border border-[#232E45] focus:border-cyan-400 text-sm text-[#F2F5FA] focus:outline-none"
               />
-              <label className="w-full sm:w-auto shrink-0 px-4 py-2.5 rounded-xl bg-[#232E45] hover:bg-[#3A4A63] text-xs font-semibold text-[#F2F5FA] border border-[#3A4A63] cursor-pointer flex items-center justify-center gap-2 transition-colors">
+              <label className="w-full sm:w-auto shrink-0 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-xs font-semibold text-white cursor-pointer flex items-center justify-center gap-2 transition-all shadow-md">
                 <Upload className="w-4 h-4" />
-                <span>Upload File</span>
+                <span>Upload from Desktop</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -250,6 +250,16 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                   className="hidden"
                 />
               </label>
+              {image && (
+                <button
+                  type="button"
+                  onClick={() => setImage('')}
+                  className="p-2.5 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-300 hover:text-rose-100 hover:bg-rose-900/50 transition-colors"
+                  title="Remove image"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
             </div>
             {image && (
               <div className="mt-2.5 relative aspect-[16/6] w-full rounded-xl overflow-hidden bg-[#1A2438] border border-[#232E45]">

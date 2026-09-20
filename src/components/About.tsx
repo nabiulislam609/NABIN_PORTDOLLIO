@@ -9,7 +9,7 @@ interface AboutProps {
 
 export const About: React.FC<AboutProps> = ({ profile, onWorkTogetherClick }) => {
   return (
-    <section id="about" className="py-24 relative z-10 border-t border-[#232E45]/60">
+    <section id="about" className="py-24 relative z-10 border-t border-[#232E45]/60 content-auto-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">

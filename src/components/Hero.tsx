@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, ChevronDown, CheckCircle2, TrendingUp, DollarSign, Award, Target } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
+import { scrollToElement } from '../utils/scroll.ts';
 
 interface HeroProps {
   profile: ProfileConfig;
@@ -141,12 +142,16 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Scroll down prompt */}
-        <div className="mt-12 flex flex-col items-center opacity-70 hover:opacity-100 transition-opacity">
-          <span className="text-xs text-[#AAB8CE] tracking-wider uppercase mb-1">
+        <button
+          onClick={() => scrollToElement('about', 76, 380)}
+          className="mt-12 flex flex-col items-center opacity-75 hover:opacity-100 transition-all cursor-pointer group focus:outline-none"
+          aria-label="Scroll down to About section"
+        >
+          <span className="text-xs text-[#AAB8CE] group-hover:text-cyan-400 tracking-wider uppercase mb-1 transition-colors">
             Scroll to explore
           </span>
-          <ChevronDown className="w-4 h-4 text-[#AAB8CE] animate-bounce" />
-        </div>
+          <ChevronDown className="w-4 h-4 text-[#AAB8CE] group-hover:text-cyan-400 group-hover:translate-y-0.5 transition-all" />
+        </button>
       </div>
     </section>
   );

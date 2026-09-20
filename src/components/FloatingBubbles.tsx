@@ -25,6 +25,10 @@ export const FloatingBubbles: React.FC = () => {
   return (
     <div
       className="fixed inset-0 pointer-events-none overflow-hidden z-0"
+      style={{
+        contain: 'strict',
+        transform: 'translateZ(0)',
+      }}
       aria-hidden="true"
     >
       {bubbles.map((b) => (

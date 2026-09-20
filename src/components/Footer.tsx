@@ -180,22 +180,24 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#AAB8CE]">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <p>© {currentYear} {profile.name}. All Rights Reserved.</p>
-            {/* Subtle discreet touchpoint for owner login without visual clutter for visitors */}
+            <span className="text-[#232E45]">|</span>
             <button
               onClick={onOpenAdminLogin}
-              title="Admin access"
-              className="opacity-20 hover:opacity-100 transition-opacity p-1 text-[#AAB8CE] hover:text-cyan-400 focus:outline-none"
-              aria-label="Owner portal access"
+              title="Admin Portal Access"
+              className="flex items-center gap-1.5 text-xs text-[#AAB8CE] hover:text-cyan-400 transition-colors font-medium cursor-pointer"
+              aria-label="Owner admin portal access"
+              id="footer-admin-portal-btn"
             >
-              <Lock className="w-3 h-3" />
+              <Lock className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Admin Portal</span>
             </button>
           </div>
 
           <button
             onClick={scrollToTop}
-            className="p-2 rounded-xl bg-[#1A2438] hover:bg-[#232E45] text-[#F2F5FA] border border-[#232E45] flex items-center gap-1.5 transition-colors"
+            className="p-2 rounded-xl bg-[#1A2438] hover:bg-[#232E45] text-[#F2F5FA] border border-[#232E45] flex items-center gap-1.5 transition-colors cursor-pointer"
             title="Back to Top"
           >
             <span>Back to top</span>

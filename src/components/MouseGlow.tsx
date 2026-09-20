@@ -37,12 +37,14 @@ export const MouseGlow: React.FC = () => {
       aria-hidden="true"
     >
       <div
-        className="absolute rounded-full pointer-events-none transition-transform duration-75 ease-out"
+        className="absolute rounded-full pointer-events-none"
         style={{
           width: '560px',
           height: '560px',
-          left: `${pos.x - 280}px`,
-          top: `${pos.y - 280}px`,
+          top: 0,
+          left: 0,
+          transform: `translate3d(${pos.x - 280}px, ${pos.y - 280}px, 0)`,
+          willChange: 'transform',
           background:
             'radial-gradient(circle, rgba(58, 74, 99, 0.18) 0%, rgba(35, 46, 69, 0.08) 45%, transparent 70%)',
           filter: 'blur(32px)',

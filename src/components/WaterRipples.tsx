@@ -192,6 +192,8 @@ export const WaterRipples: React.FC = () => {
       className="fixed inset-0 pointer-events-none z-[12] w-full h-full"
       style={{
         mixBlendMode: 'screen',
+        transform: 'translateZ(0)',
+        contain: 'strict',
       }}
       aria-hidden="true"
     />

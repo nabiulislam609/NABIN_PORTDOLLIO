@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Shield, ShieldCheck, Sparkles, Database } from 'lucide-react';
+import { Menu, X, Shield, ShieldCheck, Sparkles, Database, Lock, Settings } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
+import { scrollToElement } from '../utils/scroll.ts';
 
 interface NavbarProps {
   profile: ProfileConfig;
@@ -23,34 +24,57 @@ export const Navbar: React.FC<NavbarProps> = ({
   isAdmin,
   onOpenAdminLogin,
   onOpenBackendDocs,
+  onOpenProfileSettings,
 }) => {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
+    // High performance rAF scroll listener with state guard
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
-
-      // Spy on active sections
-      const sections = ['home', 'about', 'services', 'portfolio', 'contact'];
-      const scrollPosition = window.scrollY + 180;
-
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrolled = window.scrollY > 25;
+          setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Asynchronous IntersectionObserver for section highlighting (zero scroll-thread blocking)
+    const sectionIds = ['home', 'about', 'services', 'portfolio', 'contact'];
+    const sectionElements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find visible section with highest intersection ratio
+        const visible = entries.filter((entry) => entry.isIntersecting);
+        if (visible.length > 0) {
+          // Sort by top coordinate relative to viewport
+          visible.sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
+          setActiveSection(visible[0].target.id);
+        }
+      },
+      {
+        rootMargin: '-76px 0px -40% 0px',
+        threshold: [0.1, 0.3, 0.6],
+      }
+    );
+
+    sectionElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const handleNavClick = (
@@ -60,16 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     e.preventDefault();
     setMobileMenuOpen(false);
     const targetId = href.replace('#', '');
-    const element = document.getElementById(targetId);
-    if (element) {
-      const navHeight = 76;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navHeight;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
+    scrollToElement(targetId, 76, 380);
   };
 
   const [logoClicks, setLogoClicks] = useState(0);
@@ -144,13 +159,23 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right CTA & Admin Buttons */}
-        <div className="hidden lg:flex items-center gap-3">
-          {isAdmin && (
+        <div className="hidden lg:flex items-center gap-2.5">
+          {isAdmin ? (
             <>
+              <button
+                onClick={onOpenProfileSettings}
+                title="Profile & Settings"
+                className="px-2.5 py-1.5 text-xs font-medium text-[#AAB8CE] hover:text-[#F2F5FA] hover:bg-[#1A2438] border border-transparent hover:border-[#232E45] rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
+                id="nav-profile-settings-btn"
+              >
+                <Settings className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden xl:inline">Settings</span>
+              </button>
+
               <button
                 onClick={onOpenBackendDocs}
                 title="Database Architecture & API Docs"
-                className="p-2 text-xs font-medium text-[#AAB8CE] hover:text-[#F2F5FA] hover:bg-[#1A2438] border border-transparent hover:border-[#232E45] rounded-lg transition-colors flex items-center gap-1.5"
+                className="px-2.5 py-1.5 text-xs font-medium text-[#AAB8CE] hover:text-[#F2F5FA] hover:bg-[#1A2438] border border-transparent hover:border-[#232E45] rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer"
                 id="nav-db-docs-btn"
               >
                 <Database className="w-3.5 h-3.5 text-cyan-400" />
@@ -159,14 +184,24 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               <button
                 onClick={onOpenAdminLogin}
-                className="px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all duration-200 flex items-center gap-1.5 bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/50"
+                className="px-3.5 py-1.5 text-xs font-semibold rounded-xl border transition-all duration-200 flex items-center gap-1.5 bg-emerald-950/60 border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/60 shadow-sm cursor-pointer"
                 id="nav-admin-toggle-btn"
-                title="Admin session active"
+                title="Admin Control Hub (Active)"
               >
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Admin Active</span>
+                <span>Admin Hub</span>
               </button>
             </>
+          ) : (
+            <button
+              onClick={onOpenAdminLogin}
+              className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#3A4A63] bg-[#1A2438]/90 hover:bg-[#232E45] text-[#D0DBEA] hover:text-white transition-all duration-200 flex items-center gap-1.5 shadow-sm cursor-pointer"
+              id="nav-admin-login-btn"
+              title="Access Admin Portal & Content Management"
+            >
+              <Lock className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Admin Portal</span>
+            </button>
           )}
 
           <a
@@ -180,18 +215,31 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
+        {/* Mobile Header Buttons */}
         <div className="flex items-center gap-2 md:hidden">
-          {isAdmin && (
-            <button
-              onClick={onOpenAdminLogin}
-              className="p-2 text-emerald-300 rounded-lg bg-emerald-950/40 border border-emerald-500/40"
-              title="Admin Active"
-              aria-label="Admin Active"
-            >
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            </button>
-          )}
+          <button
+            onClick={onOpenAdminLogin}
+            className={`px-2.5 py-1.5 text-xs rounded-xl border flex items-center gap-1.5 transition-colors cursor-pointer ${
+              isAdmin
+                ? 'bg-emerald-950/60 border-emerald-500/50 text-emerald-300'
+                : 'bg-[#1A2438] border-[#3A4A63] text-[#F2F5FA] hover:bg-[#232E45]'
+            }`}
+            title={isAdmin ? 'Admin Active' : 'Admin Portal'}
+            aria-label="Admin Portal"
+            id="mobile-admin-btn"
+          >
+            {isAdmin ? (
+              <>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="font-semibold text-[11px]">Admin</span>
+              </>
+            ) : (
+              <>
+                <Lock className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="font-semibold text-[11px]">Admin</span>
+              </>
+            )}
+          </button>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -233,6 +281,31 @@ export const Navbar: React.FC<NavbarProps> = ({
               );
             })}
             <div className="pt-3 mt-2 border-t border-[#232E45] flex flex-col gap-2.5">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAdminLogin();
+                }}
+                className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-semibold border flex items-center justify-between cursor-pointer ${
+                  isAdmin
+                    ? 'text-emerald-300 bg-emerald-950/50 border-emerald-500/40'
+                    : 'text-cyan-300 bg-[#1A2438] border-cyan-500/30'
+                }`}
+                id="mobile-drawer-admin-portal-btn"
+              >
+                <span className="flex items-center gap-2">
+                  {isAdmin ? (
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  ) : (
+                    <Lock className="w-4 h-4 text-cyan-400" />
+                  )}
+                  <span>{isAdmin ? 'Admin Control Hub (Active)' : 'Admin Portal & CMS'}</span>
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded border font-mono">
+                  {isAdmin ? 'Manage' : 'Login'}
+                </span>
+              </button>
+
               {isAdmin && (
                 <button
                   onClick={() => {

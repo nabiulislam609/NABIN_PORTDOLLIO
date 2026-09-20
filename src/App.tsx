@@ -19,6 +19,7 @@ import { ProjectFormModal } from './components/ProjectFormModal.tsx';
 import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal.tsx';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.ts';
 import { ProfileConfig, Project, ContactMessage } from './types.ts';
+import { scrollToElement } from './utils/scroll.ts';
 import {
   apiGetProfile,
   apiSaveProfile,
@@ -192,18 +193,9 @@ export default function App() {
     setInquiries(updated);
   };
 
-  // Smooth scroll helpers
+  // Fast smooth scroll helper
   const scrollToSection = (sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      const navHeight = 76;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navHeight;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
+    scrollToElement(sectionId, 76, 380);
   };
 
   const handleSelectServiceForInquiry = (serviceTitle: string) => {
@@ -295,11 +287,21 @@ export default function App() {
         />
       )}
 
-      {/* Admin Login Modal */}
+      {/* Admin Login / Hub Modal */}
       <AdminLoginModal
         isOpen={isAdminLoginOpen}
         onClose={() => setIsAdminLoginOpen(false)}
         onLoginSuccess={handleLoginSuccess}
+        isAdmin={isAdmin}
+        onLogout={handleLogout}
+        onOpenProfileSettings={() => setIsProfileEditOpen(true)}
+        onAddNewProject={() => {
+          setEditingProject(null);
+          setIsProjectFormOpen(true);
+        }}
+        onOpenInquiries={() => setIsInquiriesOpen(true)}
+        onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
+        unreadInquiriesCount={inquiries.filter((m) => m.status === 'unread').length}
       />
 
       {/* Site Profile & Personalization Modal */}

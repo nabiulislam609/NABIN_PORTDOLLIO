@@ -80,7 +80,7 @@ export const Contact: React.FC<ContactProps> = ({ profile, prefilledSubject = ''
   const cleanWhatsappNumber = profile.whatsapp.replace(/[^0-9]/g, '');
 
   return (
-    <section id="contact" className="py-24 relative z-10 border-t border-[#232E45]/60 bg-[#0A0E1A]/40">
+    <section id="contact" className="py-24 relative z-10 border-t border-[#232E45]/60 bg-[#0A0E1A]/40 content-auto-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">

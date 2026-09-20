@@ -3,6 +3,7 @@
 @layer base {
   html {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -21,10 +22,10 @@
   background: #3A4A63;
 }
 
-/* Floating bubble upward motion animation */
+/* Floating bubble upward motion animation with GPU hardware acceleration */
 @keyframes floatUp {
   0% {
-    transform: translateY(105vh) scale(0.8);
+    transform: translate3d(0, 105vh, 0) scale(0.8);
     opacity: 0;
   }
   15% {
@@ -34,14 +35,16 @@
     opacity: 0.45;
   }
   100% {
-    transform: translateY(-15vh) scale(1.1);
+    transform: translate3d(0, -15vh, 0) scale(1.1);
     opacity: 0;
   }
 }
 
 .floating-bubble {
   animation: floatUp linear infinite;
-  will-change: transform, opacity;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Glassmorphism subtle surface */
@@ -56,4 +59,11 @@
   background: rgba(35, 46, 69, 0.75);
   border-color: rgba(184, 198, 220, 0.22);
 }
+
+/* Smooth scroll optimizations for below-the-fold sections */
+.content-auto-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
+}
+
 

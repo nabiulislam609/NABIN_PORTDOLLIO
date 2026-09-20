@@ -57,7 +57,7 @@ export const Services: React.FC<ServicesProps> = ({ onSelectServiceForInquiry })
   };
 
   return (
-    <section id="services" className="py-24 relative z-10 border-t border-[#232E45]/60 bg-[#0A0E1A]/40">
+    <section id="services" className="py-24 relative z-10 border-t border-[#232E45]/60 bg-[#0A0E1A]/40 content-auto-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-16">

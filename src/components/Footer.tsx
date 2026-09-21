@@ -17,12 +17,14 @@ interface FooterProps {
   profile: ProfileConfig;
   onOpenAdminLogin: () => void;
   onOpenBackendDocs: () => void;
+  onNavigateToAdmin?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   profile,
   onOpenAdminLogin,
   onOpenBackendDocs,
+  onNavigateToAdmin,
 }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -184,8 +186,8 @@ export const Footer: React.FC<FooterProps> = ({
             <p>© {currentYear} {profile.name}. All Rights Reserved.</p>
             <span className="text-[#232E45]">|</span>
             <button
-              onClick={onOpenAdminLogin}
-              title="Admin Portal Access"
+              onClick={onNavigateToAdmin || onOpenAdminLogin}
+              title="Admin Portal Access (/admin)"
               className="flex items-center gap-1.5 text-xs text-[#AAB8CE] hover:text-cyan-400 transition-colors font-medium cursor-pointer"
               aria-label="Owner admin portal access"
               id="footer-admin-portal-btn"

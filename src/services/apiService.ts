@@ -428,3 +428,32 @@ export async function apiDeleteInquiry(
 
   return list;
 }
+
+/**
+ * Mark Contact Inquiry as Read
+ */
+export async function apiMarkInquiryRead(
+  token: string,
+  id: string
+): Promise<ContactMessage[]> {
+  const cached = localStorage.getItem(KEYS.INQUIRIES);
+  let list: ContactMessage[] = cached ? JSON.parse(cached) : [];
+  list = list.map((m) => (m.id === id ? { ...m, status: 'read' as const } : m));
+  localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(list));
+
+  try {
+    const res = await fetch(`/api/contact/messages/${id}/read`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await safeParseJson(res);
+    if (res.ok && data?.messages && Array.isArray(data.messages)) {
+      localStorage.setItem(KEYS.INQUIRIES, JSON.stringify(data.messages));
+      return data.messages;
+    }
+  } catch (err) {
+    console.warn('Backend mark read unreachable, marked locally:', err);
+  }
+
+  return list;
+}

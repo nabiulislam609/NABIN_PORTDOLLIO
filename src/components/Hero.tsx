@@ -56,11 +56,6 @@ export const Hero: React.FC<HeroProps> = ({
           </span>
         </div>
 
-        {/* Personal Name */}
-        <h2 className="text-sm sm:text-base font-semibold tracking-wider text-[#B8C6DC] uppercase mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-          {profile.name}
-        </h2>
-
         {/* Main Headline & Professional Title */}
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#F2F5FA] max-w-4xl leading-[1.15] mb-6 drop-shadow-[0_4px_14px_rgba(0,0,0,0.9)]">
           <span className="block">{profile.title.split('|')[0]?.trim()}</span>

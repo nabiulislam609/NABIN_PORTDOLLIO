@@ -317,6 +317,17 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  app.put('/api/contact/messages/:id/read', requireAdmin, (req: Request, res: Response) => {
+    const { id } = req.params;
+    const messages = getMessages();
+    const target = messages.find(m => m.id === id);
+    if (target) {
+      target.status = 'read';
+      saveMessages(messages);
+    }
+    res.json({ success: true, messages });
+  });
+
   // ==================== IMAGE UPLOAD API ====================
   app.post('/api/upload', requireAdmin, (req: Request, res: Response) => {
     const { dataUrl, filename } = req.body;

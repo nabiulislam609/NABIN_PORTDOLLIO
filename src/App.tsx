@@ -12,6 +12,7 @@ import { Contact } from './components/Contact.tsx';
 import { Footer } from './components/Footer.tsx';
 import { AdminBar } from './components/AdminBar.tsx';
 import { AdminLoginModal } from './components/AdminLoginModal.tsx';
+import { AdminPortalPage } from './components/AdminPortalPage.tsx';
 import { ProfileEditModal } from './components/ProfileEditModal.tsx';
 import { InquiriesModal } from './components/InquiriesModal.tsx';
 import { BackendDocsModal } from './components/BackendDocsModal.tsx';
@@ -29,9 +30,17 @@ import {
   apiResetProjects,
   apiGetInquiries,
   apiDeleteInquiry,
+  apiMarkInquiryRead,
   apiVerifyToken,
   apiChangePassword,
 } from './services/apiService.ts';
+
+const checkIsAdminPath = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  return path === '/admin' || path.startsWith('/admin/') || hash === '#admin' || hash.startsWith('#/admin');
+};
 
 export default function App() {
   const [profile, setProfile] = useState<ProfileConfig>(DEFAULT_PROFILE);
@@ -39,6 +48,7 @@ export default function App() {
   const [inquiries, setInquiries] = useState<ContactMessage[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
+  const [isAdminRoute, setIsAdminRoute] = useState<boolean>(checkIsAdminPath);
 
   // Modals
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
@@ -98,31 +108,51 @@ export default function App() {
       });
     }
 
-    // Check if opened with #admin or ?admin
-    const checkAdminIntent = () => {
-      const hash = window.location.hash.toLowerCase();
-      const search = window.location.search.toLowerCase();
-      if (hash === '#admin' || hash === '#login' || search.includes('admin') || search.includes('login')) {
-        setIsAdminLoginOpen(true);
-      }
+    // Check if opened with #admin or /admin
+    const handleLocationChange = () => {
+      const isAdm = checkIsAdminPath();
+      setIsAdminRoute(isAdm);
     };
-    checkAdminIntent();
-    window.addEventListener('hashchange', checkAdminIntent);
+    handleLocationChange();
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
 
     // Keyboard shortcut for owner: Ctrl + Shift + A or Cmd + Shift + A
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'a' || e.key === 'A')) {
         e.preventDefault();
-        setIsAdminLoginOpen((prev) => !prev);
+        if (checkIsAdminPath()) {
+          window.history.pushState({}, '', '/');
+          setIsAdminRoute(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.history.pushState({}, '', '/admin');
+          setIsAdminRoute(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener('hashchange', checkAdminIntent);
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [fetchProfile, fetchProjects, fetchInquiries]);
+
+  // Routing Helpers
+  const navigateToAdmin = () => {
+    window.history.pushState({}, '', '/admin');
+    setIsAdminRoute(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToHome = () => {
+    window.history.pushState({}, '', '/');
+    setIsAdminRoute(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Auth Handlers
   const handleLoginSuccess = (token: string) => {
@@ -140,7 +170,7 @@ export default function App() {
   // Project CRUD Handlers
   const handleSaveProject = async (projectData: Partial<Project>) => {
     if (!adminToken) {
-      setIsAdminLoginOpen(true);
+      navigateToAdmin();
       return;
     }
 
@@ -150,7 +180,7 @@ export default function App() {
 
   const handleDeleteProject = async (id: string) => {
     if (!adminToken) {
-      setIsAdminLoginOpen(true);
+      navigateToAdmin();
       return;
     }
 
@@ -169,7 +199,7 @@ export default function App() {
   // Profile Update Handler
   const handleSaveProfile = async (updatedProfile: ProfileConfig) => {
     if (!adminToken) {
-      setIsAdminLoginOpen(true);
+      navigateToAdmin();
       return;
     }
 
@@ -186,10 +216,16 @@ export default function App() {
     }
   };
 
-  // Inquiry Delete Handler
+  // Inquiry Handlers
   const handleDeleteMessage = async (id: string) => {
     if (!adminToken) return;
     const updated = await apiDeleteInquiry(adminToken, id);
+    setInquiries(updated);
+  };
+
+  const handleMarkInquiryRead = async (id: string) => {
+    if (!adminToken) return;
+    const updated = await apiMarkInquiryRead(adminToken, id);
     setInquiries(updated);
   };
 
@@ -211,41 +247,19 @@ export default function App() {
       <MouseBubble />
       <WaterRipples />
 
-      {/* Primary Sticky Navigation Bar */}
-      <Navbar
-        profile={profile}
-        isAdmin={isAdmin}
-        onOpenAdminLogin={() => setIsAdminLoginOpen(true)}
-        onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
-        onOpenProfileSettings={() => setIsProfileEditOpen(true)}
-      />
-
-      <main className="relative z-10">
-        {/* Hero Section */}
-        <Hero
+      {/* Render Dedicated Admin Portal Page when URL is /admin, or render public portfolio */}
+      {isAdminRoute ? (
+        <AdminPortalPage
           profile={profile}
-          onExplorePortfolio={() => scrollToSection('portfolio')}
-          onContactClick={() => scrollToSection('contact')}
-        />
-
-        {/* About Section */}
-        <About
-          profile={profile}
-          onWorkTogetherClick={() => scrollToSection('contact')}
-        />
-
-        {/* Services Section */}
-        <Services onSelectServiceForInquiry={handleSelectServiceForInquiry} />
-
-        {/* Portfolio Section */}
-        <Portfolio
           projects={projects}
+          inquiries={inquiries}
           isAdmin={isAdmin}
-          onSaveProject={handleSaveProject}
-          onDeleteProject={handleDeleteProject}
-          onResetProjects={handleResetProjects}
-          onRequestAdmin={() => setIsAdminLoginOpen(true)}
-          onOpenAddProject={() => {
+          adminToken={adminToken}
+          onLoginSuccess={handleLoginSuccess}
+          onLogout={handleLogout}
+          onNavigateHome={navigateToHome}
+          onOpenProfileSettings={() => setIsProfileEditOpen(true)}
+          onAddNewProject={() => {
             setEditingProject(null);
             setIsProjectFormOpen(true);
           }}
@@ -253,38 +267,84 @@ export default function App() {
             setEditingProject(project);
             setIsProjectFormOpen(true);
           }}
-          onViewCaseStudy={(project) => {
-            setSelectedCaseStudy(project);
-          }}
-        />
-
-        {/* Contact Section */}
-        <Contact
-          profile={profile}
-          prefilledSubject={prefilledSubject}
-        />
-      </main>
-
-      {/* Footer */}
-      <Footer
-        profile={profile}
-        onOpenAdminLogin={() => setIsAdminLoginOpen(true)}
-        onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
-      />
-
-      {/* Admin Floating Control Bar (visible when logged in) */}
-      {isAdmin && (
-        <AdminBar
-          unreadInquiriesCount={inquiries.length}
-          onAddNewProject={() => {
-            setEditingProject(null);
-            setIsProjectFormOpen(true);
-          }}
-          onOpenProfileSettings={() => setIsProfileEditOpen(true)}
-          onOpenInquiries={() => setIsInquiriesOpen(true)}
+          onDeleteProject={handleDeleteProject}
           onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
-          onLogout={handleLogout}
+          onMarkInquiryRead={handleMarkInquiryRead}
+          onDeleteInquiry={handleDeleteMessage}
         />
+      ) : (
+        <>
+          {/* Primary Sticky Navigation Bar (Clean public view without admin clutter) */}
+          <Navbar profile={profile} />
+
+          <main className="relative z-10">
+            {/* Hero Section */}
+            <Hero
+              profile={profile}
+              onExplorePortfolio={() => scrollToSection('portfolio')}
+              onContactClick={() => scrollToSection('contact')}
+            />
+
+            {/* About Section */}
+            <About
+              profile={profile}
+              onWorkTogetherClick={() => scrollToSection('contact')}
+            />
+
+            {/* Services Section */}
+            <Services onSelectServiceForInquiry={handleSelectServiceForInquiry} />
+
+            {/* Portfolio Section */}
+            <Portfolio
+              projects={projects}
+              isAdmin={isAdmin}
+              onSaveProject={handleSaveProject}
+              onDeleteProject={handleDeleteProject}
+              onResetProjects={handleResetProjects}
+              onRequestAdmin={navigateToAdmin}
+              onOpenAddProject={() => {
+                setEditingProject(null);
+                setIsProjectFormOpen(true);
+              }}
+              onEditProject={(project) => {
+                setEditingProject(project);
+                setIsProjectFormOpen(true);
+              }}
+              onViewCaseStudy={(project) => {
+                setSelectedCaseStudy(project);
+              }}
+            />
+
+            {/* Contact Section */}
+            <Contact
+              profile={profile}
+              prefilledSubject={prefilledSubject}
+            />
+          </main>
+
+          {/* Footer with discreet link to /admin */}
+          <Footer
+            profile={profile}
+            onOpenAdminLogin={navigateToAdmin}
+            onNavigateToAdmin={navigateToAdmin}
+            onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
+          />
+
+          {/* Admin Floating Control Bar (only visible when logged in and browsing public view) */}
+          {isAdmin && (
+            <AdminBar
+              unreadInquiriesCount={inquiries.filter((m) => m.status === 'unread').length}
+              onAddNewProject={() => {
+                setEditingProject(null);
+                setIsProjectFormOpen(true);
+              }}
+              onOpenProfileSettings={() => setIsProfileEditOpen(true)}
+              onOpenInquiries={navigateToAdmin}
+              onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
+              onLogout={handleLogout}
+            />
+          )}
+        </>
       )}
 
       {/* Admin Login / Hub Modal */}

@@ -22,13 +22,33 @@ async function safeParseJson<T = any>(res: Response): Promise<T | null> {
   }
 }
 
+// Clean up any deprecated 'admin' password stored in previous sessions
+if (typeof window !== 'undefined') {
+  try {
+    if (localStorage.getItem(KEYS.PASSWORD) === 'admin') {
+      localStorage.removeItem(KEYS.PASSWORD);
+    }
+  } catch {
+    // Ignore storage access errors
+  }
+}
+
 /**
  * Admin Login
  * Supports both full-stack Node server and static host (Vercel/Netlify) fallback.
+ * Strictly enforces password 'NABIN' (or user updated password), and strictly rejects 'admin'.
  */
 export async function apiLogin(
   password: string
 ): Promise<{ success: boolean; token?: string; error?: string }> {
+  // Disallow 'admin' completely
+  if (password === 'admin') {
+    return {
+      success: false,
+      error: 'Default password "admin" has been permanently removed. Please enter "NABIN".',
+    };
+  }
+
   try {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
@@ -44,30 +64,26 @@ export async function apiLogin(
     }
 
     // Explicit credential rejection from active backend
-    if (res.status === 401 && data?.error) {
-      // Check if password matches a local changed password or default NABIN
-      const storedPwd = localStorage.getItem(KEYS.PASSWORD);
-      const effectivePwd = storedPwd && storedPwd !== 'admin' ? storedPwd : 'NABIN';
-      if (password === effectivePwd || password === 'NABIN') {
-        const localToken = 'local-admin-' + Date.now();
-        localStorage.setItem(KEYS.TOKEN, localToken);
-        return { success: true, token: localToken };
-      }
-      return { success: false, error: data.error };
+    if (res.status === 401 || (data && !data.success)) {
+      return {
+        success: false,
+        error: data?.error || 'Invalid administrator credentials',
+      };
     }
   } catch (err) {
-    console.warn('Server endpoint unreachable, using client authentication:', err);
+    console.warn('Server endpoint unreachable, falling back to local verification:', err);
   }
 
-  // Graceful fallback for static deployments (Vercel, Netlify, offline)
+  // Graceful fallback ONLY for offline/static deployment:
+  // Must match 'NABIN' or custom password set in profile (never 'admin')
   const storedPwd = localStorage.getItem(KEYS.PASSWORD);
-  const effectivePwd = storedPwd && storedPwd !== 'admin' ? storedPwd : 'NABIN';
-  if (password === effectivePwd || password === 'NABIN') {
+  const authorizedPwd = storedPwd && storedPwd !== 'admin' ? storedPwd : 'NABIN';
+  if (password === authorizedPwd && password !== 'admin') {
     const localToken = 'local-admin-' + Date.now();
     localStorage.setItem(KEYS.TOKEN, localToken);
     return { success: true, token: localToken };
   } else {
-    return { success: false, error: 'Invalid admin credentials' };
+    return { success: false, error: 'Invalid administrator credentials' };
   }
 }
 

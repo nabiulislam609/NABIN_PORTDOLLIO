@@ -77,7 +77,13 @@ function getAuthData(): AuthData {
   try {
     if (fs.existsSync(AUTH_FILE)) {
       const data = fs.readFileSync(AUTH_FILE, 'utf-8');
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      // Ensure deprecated 'admin' password cannot be used; enforce NABIN
+      if (!parsed.adminPassword || parsed.adminPassword === 'admin') {
+        parsed.adminPassword = 'NABIN';
+        fs.writeFileSync(AUTH_FILE, JSON.stringify(parsed, null, 2));
+      }
+      return parsed;
     }
   } catch (e) {
     console.error('Error reading auth.json:', e);
@@ -127,6 +133,10 @@ async function startServer() {
 
     if (!password) {
       return res.status(400).json({ error: 'Password is required' });
+    }
+
+    if (password === 'admin') {
+      return res.status(401).json({ error: 'The default password "admin" is disabled. Please enter "NABIN".' });
     }
 
     if (password === auth.adminPassword) {

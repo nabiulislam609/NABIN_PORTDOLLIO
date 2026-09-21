@@ -9,12 +9,29 @@
   --theme-primary-glow: rgba(6, 182, 212, 0.45);
   --theme-primary-tint: rgba(6, 182, 212, 0.12);
   --theme-primary-border: rgba(6, 182, 212, 0.42);
+
+  --site-bg: #0A0E1A;
+  --site-bg-rgb: 10, 14, 26;
+  --site-bg-surface: #1A2438;
+  --site-bg-elevated: #232E45;
+  --site-bg-card: rgba(26, 36, 56, 0.75);
+  --site-border: rgba(184, 198, 220, 0.14);
+  --site-text-primary: #F2F5FA;
+  --site-text-secondary: #AAB8CE;
+  --site-text-muted: #7E8DA5;
+  --site-navbar-bg: rgba(10, 14, 26, 0.88);
+  --site-footer-bg: #0A0E1A;
 }
 
 @layer base {
   html {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     scroll-behavior: auto !important;
+  }
+  body {
+    background-color: var(--site-bg, #0A0E1A);
+    color: var(--site-text-primary, #F2F5FA);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -64,7 +81,7 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0E1A;
+  background: var(--site-bg, #0A0E1A);
 }
 ::-webkit-scrollbar-thumb {
   background: #232E45;

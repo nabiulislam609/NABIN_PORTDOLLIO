@@ -19,7 +19,11 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ profile, onOpenColorPicker, onResetTheme }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  profile,
+  onOpenColorPicker,
+  onResetTheme,
+}) => {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -90,9 +94,14 @@ export const Navbar: React.FC<NavbarProps> = ({ profile, onOpenColorPicker, onRe
       id="main-navbar"
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#0A0E1A]/85 backdrop-blur-md border-b border-[#232E45]/80 py-3.5 shadow-lg shadow-black/20'
+          ? 'backdrop-blur-md border-b border-[#232E45]/80 py-3.5 shadow-lg shadow-black/20'
           : 'bg-transparent py-5'
       }`}
+      style={
+        isScrolled
+          ? { backgroundColor: 'var(--site-navbar-bg, rgba(10, 14, 26, 0.88))' }
+          : undefined
+      }
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand Identity / Logo */}
@@ -175,7 +184,8 @@ export const Navbar: React.FC<NavbarProps> = ({ profile, onOpenColorPicker, onRe
       {mobileMenuOpen && (
         <div
           id="mobile-menu-drawer"
-          className="md:hidden bg-[#0A0E1A]/95 backdrop-blur-xl border-b border-[#232E45] px-6 py-5 shadow-2xl transition-all"
+          className="md:hidden backdrop-blur-xl border-b border-[#232E45] px-6 py-5 shadow-2xl transition-all"
+          style={{ backgroundColor: 'var(--site-navbar-bg, rgba(10, 14, 26, 0.95))' }}
         >
           <nav className="flex flex-col gap-2">
             {NAV_LINKS.map((link) => {
@@ -195,7 +205,8 @@ export const Navbar: React.FC<NavbarProps> = ({ profile, onOpenColorPicker, onRe
                 </a>
               );
             })}
-            <div className="pt-3 mt-2 border-t border-[#232E45] flex flex-col gap-2.5">
+
+            <div className="pt-3 mt-1 border-t border-[#232E45] flex flex-col gap-2.5">
               <a
                 href="#contact"
                 onClick={(e) => handleNavClick(e, '#contact')}

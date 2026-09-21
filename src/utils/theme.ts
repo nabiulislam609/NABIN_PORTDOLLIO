@@ -242,3 +242,106 @@ export function getSavedThemeColor(): string {
   } catch {}
   return DEFAULT_THEME_COLOR;
 }
+
+/**
+ * Background Color Management
+ */
+export const DEFAULT_BACKGROUND_COLOR = '#0A0E1A'; // Deep Cosmic Navy
+
+export interface BgPreset {
+  name: string;
+  hex: string;
+  category: 'Dark' | 'Deep' | 'Light';
+}
+
+export const BACKGROUND_COLOR_PRESETS: BgPreset[] = [
+  { name: 'Midnight Navy (Default)', hex: '#0A0E1A', category: 'Deep' },
+  { name: 'Pitch Black (OLED)', hex: '#000000', category: 'Dark' },
+  { name: 'Obsidian Abyss', hex: '#07090E', category: 'Dark' },
+  { name: 'Charcoal Studio', hex: '#121418', category: 'Dark' },
+  { name: 'Cyber Indigo', hex: '#0B0F24', category: 'Deep' },
+  { name: 'Royal Slate', hex: '#0F172A', category: 'Deep' },
+  { name: 'Abyss Emerald', hex: '#061410', category: 'Deep' },
+  { name: 'Imperial Violet', hex: '#12091D', category: 'Deep' },
+  { name: 'Burgundy Noir', hex: '#170910', category: 'Deep' },
+  { name: 'Dark Espresso', hex: '#140F0A', category: 'Dark' },
+  { name: 'Titanium Gunmetal', hex: '#191C24', category: 'Dark' },
+  { name: 'Nordic Slate Light', hex: '#F1F5F9', category: 'Light' },
+  { name: 'Minimal Snow Light', hex: '#FAFAFA', category: 'Light' },
+  { name: 'Editorial Cream Light', hex: '#F7F4EB', category: 'Light' },
+];
+
+/**
+ * Apply website background color dynamically to root styles and document body
+ */
+export function applyWebsiteBackgroundColor(color: string): void {
+  if (typeof document === 'undefined') return;
+
+  const validHex = normalizeHex(color || DEFAULT_BACKGROUND_COLOR);
+  const rgb = hexToRgb(validHex);
+  const luminance = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+  const isLight = luminance >= 140;
+
+  const root = document.documentElement;
+  root.style.setProperty('--site-bg', validHex);
+  root.style.setProperty('--site-bg-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+
+  if (isLight) {
+    const surface = adjustBrightness(validHex, -5);
+    const elevated = adjustBrightness(validHex, -10);
+    root.style.setProperty('--site-bg-surface', surface);
+    root.style.setProperty('--site-bg-elevated', elevated);
+    root.style.setProperty('--site-bg-card', 'rgba(255, 255, 255, 0.92)');
+    root.style.setProperty('--site-border', 'rgba(0, 0, 0, 0.12)');
+    root.style.setProperty('--site-text-primary', '#0F172A');
+    root.style.setProperty('--site-text-secondary', '#334155');
+    root.style.setProperty('--site-text-muted', '#64748B');
+    root.style.setProperty('--site-navbar-bg', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.92)`);
+    root.style.setProperty('--site-footer-bg', validHex);
+  } else {
+    const surface = adjustBrightness(validHex, 12);
+    const elevated = adjustBrightness(validHex, 20);
+    root.style.setProperty('--site-bg-surface', surface);
+    root.style.setProperty('--site-bg-elevated', elevated);
+    root.style.setProperty(
+      '--site-bg-card',
+      `rgba(${Math.min(255, rgb.r + 14)}, ${Math.min(255, rgb.g + 20)}, ${Math.min(255, rgb.b + 30)}, 0.75)`
+    );
+    root.style.setProperty('--site-border', 'rgba(184, 198, 220, 0.14)');
+    root.style.setProperty('--site-text-primary', '#F2F5FA');
+    root.style.setProperty('--site-text-secondary', '#AAB8CE');
+    root.style.setProperty('--site-text-muted', '#7E8DA5');
+    root.style.setProperty('--site-navbar-bg', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.88)`);
+    root.style.setProperty('--site-footer-bg', validHex);
+  }
+
+  if (document.body) {
+    document.body.style.backgroundColor = validHex;
+  }
+
+  try {
+    localStorage.setItem('portfolio_bg_color', validHex);
+  } catch {}
+}
+
+/**
+ * Retrieve saved background color or fallback to default
+ */
+export function getSavedBackgroundColor(): string {
+  if (typeof window === 'undefined') return DEFAULT_BACKGROUND_COLOR;
+  try {
+    const saved = localStorage.getItem('portfolio_bg_color');
+    if (saved && isValidHex(saved)) {
+      return normalizeHex(saved);
+    }
+  } catch {}
+  return DEFAULT_BACKGROUND_COLOR;
+}
+
+/**
+ * Reset website background to original default
+ */
+export function resetWebsiteBackgroundColor(): void {
+  applyWebsiteBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+}
+

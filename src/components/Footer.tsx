@@ -9,14 +9,13 @@ import {
   MapPin,
   Mail,
   Phone,
-  Lock,
 } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 
 interface FooterProps {
   profile: ProfileConfig;
-  onOpenAdminLogin: () => void;
-  onOpenBackendDocs: () => void;
+  onOpenAdminLogin?: () => void;
+  onOpenBackendDocs?: () => void;
   onNavigateToAdmin?: () => void;
 }
 
@@ -33,7 +32,10 @@ export const Footer: React.FC<FooterProps> = ({
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#0A0E1A] border-t border-[#232E45] text-[#AAB8CE] relative z-10 pt-16 pb-12">
+    <footer
+      className="border-t border-[#232E45] text-[#AAB8CE] relative z-10 pt-16 pb-12 transition-colors duration-300"
+      style={{ backgroundColor: 'var(--site-footer-bg, #0A0E1A)' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-[#232E45]/70">
           {/* Identity & Mission */}
@@ -182,28 +184,18 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#AAB8CE]">
+          <p>© {currentYear} {profile.name}. All Rights Reserved.</p>
+
           <div className="flex items-center gap-3">
-            <p>© {currentYear} {profile.name}. All Rights Reserved.</p>
-            <span className="text-[#232E45]">|</span>
             <button
-              onClick={onNavigateToAdmin || onOpenAdminLogin}
-              title="Admin Portal Access (/admin)"
-              className="p-1 rounded-md text-[#6D7F9B] hover:text-cyan-400 hover:bg-[#1A2438] transition-colors cursor-pointer"
-              aria-label="Admin Portal"
-              id="footer-admin-portal-btn"
+              onClick={scrollToTop}
+              className="p-2 rounded-xl bg-[#1A2438] hover:bg-[#232E45] text-[#F2F5FA] border border-[#232E45] flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Back to Top"
             >
-              <Lock className="w-3.5 h-3.5 text-cyan-400/80 hover:text-cyan-300" />
+              <span>Back to top</span>
+              <ArrowUp className="w-3.5 h-3.5" />
             </button>
           </div>
-
-          <button
-            onClick={scrollToTop}
-            className="p-2 rounded-xl bg-[#1A2438] hover:bg-[#232E45] text-[#F2F5FA] border border-[#232E45] flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Back to Top"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
     </footer>

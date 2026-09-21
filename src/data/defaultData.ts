@@ -4,6 +4,7 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   name: 'Nabiul Islam Nabin',
   title: 'Data-Driven Digital Marketer | Paid Advertising & SEO Specialist',
   themeColor: '#06B6D4',
+  backgroundColor: '#0A0E1A',
   heroDescription:
     'I help businesses improve their online visibility, reach the right audience, and achieve measurable growth through effective digital marketing strategies.',
   aboutBio:

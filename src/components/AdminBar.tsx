@@ -1,12 +1,16 @@
 import React from 'react';
-import { PlusCircle, Settings, Mail, ShieldAlert, LogOut, Database } from 'lucide-react';
+import { PlusCircle, Settings, Mail, ShieldAlert, LogOut, Database, Palette, RotateCcw } from 'lucide-react';
 import { PhotoshopColorBox } from './PhotoshopColorBox.tsx';
+import { DEFAULT_BACKGROUND_COLOR, normalizeHex } from '../utils/theme.ts';
 
 interface AdminBarProps {
   unreadInquiriesCount: number;
   themeColor?: string;
   onOpenThemePicker?: () => void;
   onResetTheme?: () => void;
+  currentBgColor?: string;
+  onOpenBgColorPlate?: () => void;
+  onResetBgColor?: () => void;
   onAddNewProject: () => void;
   onOpenProfileSettings: () => void;
   onOpenInquiries: () => void;
@@ -19,12 +23,18 @@ export const AdminBar: React.FC<AdminBarProps> = ({
   themeColor,
   onOpenThemePicker,
   onResetTheme,
+  currentBgColor,
+  onOpenBgColorPlate,
+  onResetBgColor,
   onAddNewProject,
   onOpenProfileSettings,
   onOpenInquiries,
   onOpenBackendDocs,
   onLogout,
 }) => {
+  const bgHex = normalizeHex(currentBgColor || DEFAULT_BACKGROUND_COLOR);
+  const isCustomBg = bgHex.toLowerCase() !== DEFAULT_BACKGROUND_COLOR.toLowerCase();
+
   return (
     <aside
       aria-label="Admin Control Toolbar"
@@ -38,6 +48,38 @@ export const AdminBar: React.FC<AdminBarProps> = ({
           Admin Mode
         </span>
       </div>
+
+      {/* Website Background Color Plate Quick Trigger */}
+      {onOpenBgColorPlate && (
+        <div className="pr-2 border-r border-[#232E45] shrink-0 flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onOpenBgColorPlate}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#151F36] hover:bg-[#1E2942] border border-[#232E45] hover:border-cyan-400/50 text-[#F2F5FA] text-xs font-semibold transition-all cursor-pointer"
+            title="Website Background Color Plate"
+            id="admin-bg-plate-btn"
+          >
+            <div
+              className="w-3.5 h-3.5 rounded-full border border-white/70 shadow-sm shrink-0"
+              style={{ backgroundColor: bgHex }}
+            />
+            <Palette className="w-3.5 h-3.5 text-cyan-400" />
+            <span>BG</span>
+          </button>
+
+          {isCustomBg && onResetBgColor && (
+            <button
+              type="button"
+              onClick={onResetBgColor}
+              className="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/35 border border-rose-500/40 text-rose-300 hover:text-white transition-colors cursor-pointer"
+              title="Reset background color to default (#0A0E1A)"
+              id="admin-reset-bg-btn"
+            >
+              <RotateCcw className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Photoshop Theme Color Box Widget */}
       {onOpenThemePicker && (

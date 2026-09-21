@@ -20,9 +20,17 @@ import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal.tsx';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.ts';
 import { ProfileConfig, Project, ContactMessage } from './types.ts';
 import { scrollToElement } from './utils/scroll.ts';
-import { applyWebsiteTheme, getSavedThemeColor, DEFAULT_THEME_COLOR } from './utils/theme.ts';
+import {
+  applyWebsiteTheme,
+  getSavedThemeColor,
+  DEFAULT_THEME_COLOR,
+  applyWebsiteBackgroundColor,
+  getSavedBackgroundColor,
+  resetWebsiteBackgroundColor,
+  DEFAULT_BACKGROUND_COLOR,
+} from './utils/theme.ts';
 import { PhotoshopColorPickerModal } from './components/PhotoshopColorPickerModal.tsx';
-import { AdminBar } from './components/AdminBar.tsx';
+import { BackgroundColorPlate } from './components/BackgroundColorPlate.tsx';
 import {
   apiGetProfile,
   apiSaveProfile,
@@ -62,12 +70,50 @@ export default function App() {
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<Project | null>(null);
   const [prefilledSubject, setPrefilledSubject] = useState('');
   const [isThemePickerOpen, setIsThemePickerOpen] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState<string>(() => profile.backgroundColor || getSavedBackgroundColor());
+  const [isBgColorPlateOpen, setIsBgColorPlateOpen] = useState(false);
 
   // Initialize and apply website theme dynamically
   useEffect(() => {
     const initialColor = profile.themeColor || getSavedThemeColor();
     applyWebsiteTheme(initialColor);
   }, [profile.themeColor]);
+
+  // Initialize and apply website background color dynamically
+  useEffect(() => {
+    const initialBg = profile.backgroundColor || getSavedBackgroundColor();
+    applyWebsiteBackgroundColor(initialBg);
+    setBackgroundColor(initialBg);
+  }, [profile.backgroundColor]);
+
+  // Background color update handlers
+  const handleUpdateBgColor = async (newBg: string) => {
+    applyWebsiteBackgroundColor(newBg);
+    setBackgroundColor(newBg);
+    const updatedProfile = { ...profile, backgroundColor: newBg };
+    setProfile(updatedProfile);
+    if (adminToken) {
+      try {
+        await apiSaveProfile(adminToken, updatedProfile);
+      } catch (err) {
+        console.warn('Background color update saved locally:', err);
+      }
+    }
+  };
+
+  const handleResetBgColor = async () => {
+    resetWebsiteBackgroundColor();
+    setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
+    const updatedProfile = { ...profile, backgroundColor: DEFAULT_BACKGROUND_COLOR };
+    setProfile(updatedProfile);
+    if (adminToken) {
+      try {
+        await apiSaveProfile(adminToken, updatedProfile);
+      } catch (err) {
+        console.warn('Background color reset saved locally:', err);
+      }
+    }
+  };
 
   // Theme update handlers
   const handleUpdateTheme = async (newColor: string) => {
@@ -276,7 +322,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0E1A] text-[#F2F5FA] relative selection:bg-[#3A4A63] selection:text-white">
+    <div
+      className="min-h-screen relative selection:bg-[#3A4A63] selection:text-white transition-colors duration-300"
+      style={{
+        backgroundColor: 'var(--site-bg, #0A0E1A)',
+        color: 'var(--site-text-primary, #F2F5FA)',
+      }}
+    >
       {/* Background Ambience: Floating Bubbles, Dynamic Mouse Glow, Mouse Bubble Cursor & Water Ripples */}
       <FloatingBubbles />
       <MouseGlow />
@@ -309,11 +361,18 @@ export default function App() {
           onDeleteInquiry={handleDeleteMessage}
           onUpdateTheme={handleUpdateTheme}
           onResetTheme={handleResetTheme}
+          currentBgColor={backgroundColor}
+          onOpenBgColorPlate={() => setIsBgColorPlateOpen(true)}
+          onResetBgColor={handleResetBgColor}
         />
       ) : (
         <>
-          {/* Primary Sticky Navigation Bar (Clean public view without admin clutter) */}
-          <Navbar profile={profile} />
+          {/* Primary Sticky Navigation Bar */}
+          <Navbar
+            profile={profile}
+            onOpenColorPicker={() => setIsThemePickerOpen(true)}
+            onResetTheme={handleResetTheme}
+          />
 
           <main className="relative z-10">
             {/* Hero Section */}
@@ -360,33 +419,25 @@ export default function App() {
             />
           </main>
 
-          {/* Footer with discreet link to /admin */}
+          {/* Footer */}
           <Footer
             profile={profile}
             onOpenAdminLogin={navigateToAdmin}
             onNavigateToAdmin={navigateToAdmin}
             onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
           />
-
-          {/* Floating Admin Toolbar when logged in on the public website */}
-          {isAdmin && !isAdminRoute && (
-            <AdminBar
-              unreadInquiriesCount={inquiries.filter((m) => m.status === 'unread').length}
-              themeColor={profile.themeColor || DEFAULT_THEME_COLOR}
-              onOpenThemePicker={() => setIsThemePickerOpen(true)}
-              onResetTheme={handleResetTheme}
-              onAddNewProject={() => {
-                setEditingProject(null);
-                setIsProjectFormOpen(true);
-              }}
-              onOpenProfileSettings={() => setIsProfileEditOpen(true)}
-              onOpenInquiries={() => setIsInquiriesOpen(true)}
-              onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
-              onLogout={handleLogout}
-            />
-          )}
         </>
       )}
+
+      {/* Website Background Color Plate (Only accessible from Admin Panel) */}
+      <BackgroundColorPlate
+        currentBgColor={backgroundColor}
+        onUpdateBgColor={handleUpdateBgColor}
+        onResetBgColor={handleResetBgColor}
+        isOpenExternal={isBgColorPlateOpen}
+        onCloseExternal={() => setIsBgColorPlateOpen(false)}
+        showFloatingDock={false}
+      />
 
       {/* Global Photoshop Color Picker Modal */}
       <PhotoshopColorPickerModal

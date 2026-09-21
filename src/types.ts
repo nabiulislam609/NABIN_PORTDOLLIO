@@ -20,6 +20,7 @@ export interface ProfileConfig {
   name: string;
   title: string;
   themeColor?: string;
+  backgroundColor?: string;
   heroDescription: string;
   aboutBio: string;
   workApproach: string;

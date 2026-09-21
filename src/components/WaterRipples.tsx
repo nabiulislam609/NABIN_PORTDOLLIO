@@ -42,9 +42,16 @@ export const WaterRipples: React.FC = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
 
+    // Helper to get active theme rgb
+    const getThemeRgb = () => {
+      const computed = getComputedStyle(document.documentElement).getPropertyValue('--theme-primary-rgb').trim();
+      return computed || '56, 189, 248';
+    };
+
     // Animation render loop
     const render = () => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      const themeRgb = getThemeRgb();
 
       const ripples = ripplesRef.current;
       for (let i = ripples.length - 1; i >= 0; i--) {
@@ -73,10 +80,10 @@ export const WaterRipples: React.FC = () => {
           ctx.beginPath();
           ctx.arc(r.x, r.y, ringRadius, 0, Math.PI * 2);
           ctx.strokeStyle = ring === 0 
-            ? `rgba(186, 230, 253, ${ringAlpha * 0.95})` // Bright specular highlight on leading edge
-            : `rgba(56, 189, 248, ${ringAlpha * 0.75})`;  // Cyan refraction wave body
+            ? `rgba(255, 255, 255, ${ringAlpha * 0.95})` // Bright specular highlight on leading edge
+            : `rgba(${themeRgb}, ${ringAlpha * 0.8})`;    // Dynamic theme refraction wave body
           ctx.lineWidth = ringWidth;
-          ctx.shadowColor = 'rgba(56, 189, 248, 0.4)';
+          ctx.shadowColor = `rgba(${themeRgb}, 0.45)`;
           ctx.shadowBlur = r.isClick ? 8 : 4;
           ctx.stroke();
 
@@ -91,8 +98,8 @@ export const WaterRipples: React.FC = () => {
               ringRadius
             );
             grad.addColorStop(0, 'transparent');
-            grad.addColorStop(0.7, `rgba(56, 189, 248, ${ringAlpha * 0.08})`);
-            grad.addColorStop(1, `rgba(186, 230, 253, ${ringAlpha * 0.15})`);
+            grad.addColorStop(0.7, `rgba(${themeRgb}, ${ringAlpha * 0.09})`);
+            grad.addColorStop(1, `rgba(255, 255, 255, ${ringAlpha * 0.15})`);
 
             ctx.fillStyle = grad;
             ctx.beginPath();

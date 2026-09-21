@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Sparkles } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 import { scrollToElement } from '../utils/scroll.ts';
+import { PhotoshopColorBox } from './PhotoshopColorBox.tsx';
+import { DEFAULT_THEME_COLOR } from '../utils/theme.ts';
 
 interface NavbarProps {
   profile: ProfileConfig;
+  onOpenColorPicker?: () => void;
+  onResetTheme?: () => void;
 }
 
 const NAV_LINKS = [
@@ -15,7 +19,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ profile }) => {
+export const Navbar: React.FC<NavbarProps> = ({ profile, onOpenColorPicker, onResetTheme }) => {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

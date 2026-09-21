@@ -74,7 +74,10 @@ export const Hero: React.FC<HeroProps> = ({
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
         {/* Credibility Tag */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1A2438]/90 border border-[#3A4A63]/80 backdrop-blur-md shadow-md mb-6 animate-fade-in">
-          <span className="w-2 h-2 rounded-full bg-cyan-400"></span>
+          <span
+            className="w-2 h-2 rounded-full shadow-[0_0_8px_var(--theme-primary-glow)]"
+            style={{ backgroundColor: 'var(--theme-primary)' }}
+          ></span>
           <span className="text-xs font-semibold tracking-wide uppercase text-[#B8C6DC]">
             Data-Driven Performance Marketing
           </span>

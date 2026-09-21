@@ -20,6 +20,9 @@ import { ProjectCaseStudyModal } from './components/ProjectCaseStudyModal.tsx';
 import { DEFAULT_PROFILE, DEFAULT_PROJECTS } from './data/defaultData.ts';
 import { ProfileConfig, Project, ContactMessage } from './types.ts';
 import { scrollToElement } from './utils/scroll.ts';
+import { applyWebsiteTheme, getSavedThemeColor, DEFAULT_THEME_COLOR } from './utils/theme.ts';
+import { PhotoshopColorPickerModal } from './components/PhotoshopColorPickerModal.tsx';
+import { AdminBar } from './components/AdminBar.tsx';
 import {
   apiGetProfile,
   apiSaveProfile,
@@ -58,6 +61,40 @@ export default function App() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<Project | null>(null);
   const [prefilledSubject, setPrefilledSubject] = useState('');
+  const [isThemePickerOpen, setIsThemePickerOpen] = useState(false);
+
+  // Initialize and apply website theme dynamically
+  useEffect(() => {
+    const initialColor = profile.themeColor || getSavedThemeColor();
+    applyWebsiteTheme(initialColor);
+  }, [profile.themeColor]);
+
+  // Theme update handlers
+  const handleUpdateTheme = async (newColor: string) => {
+    applyWebsiteTheme(newColor);
+    const updatedProfile = { ...profile, themeColor: newColor };
+    setProfile(updatedProfile);
+    if (adminToken) {
+      try {
+        await apiSaveProfile(adminToken, updatedProfile);
+      } catch (err) {
+        console.warn('Theme update persisted locally:', err);
+      }
+    }
+  };
+
+  const handleResetTheme = async () => {
+    applyWebsiteTheme(DEFAULT_THEME_COLOR);
+    const updatedProfile = { ...profile, themeColor: DEFAULT_THEME_COLOR };
+    setProfile(updatedProfile);
+    if (adminToken) {
+      try {
+        await apiSaveProfile(adminToken, updatedProfile);
+      } catch (err) {
+        console.warn('Theme reset persisted locally:', err);
+      }
+    }
+  };
 
   // Initial Data Fetching
   const fetchProfile = useCallback(async () => {
@@ -270,6 +307,8 @@ export default function App() {
           onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
           onMarkInquiryRead={handleMarkInquiryRead}
           onDeleteInquiry={handleDeleteMessage}
+          onUpdateTheme={handleUpdateTheme}
+          onResetTheme={handleResetTheme}
         />
       ) : (
         <>
@@ -328,8 +367,35 @@ export default function App() {
             onNavigateToAdmin={navigateToAdmin}
             onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
           />
+
+          {/* Floating Admin Toolbar when logged in on the public website */}
+          {isAdmin && !isAdminRoute && (
+            <AdminBar
+              unreadInquiriesCount={inquiries.filter((m) => m.status === 'unread').length}
+              themeColor={profile.themeColor || DEFAULT_THEME_COLOR}
+              onOpenThemePicker={() => setIsThemePickerOpen(true)}
+              onResetTheme={handleResetTheme}
+              onAddNewProject={() => {
+                setEditingProject(null);
+                setIsProjectFormOpen(true);
+              }}
+              onOpenProfileSettings={() => setIsProfileEditOpen(true)}
+              onOpenInquiries={() => setIsInquiriesOpen(true)}
+              onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
+              onLogout={handleLogout}
+            />
+          )}
         </>
       )}
+
+      {/* Global Photoshop Color Picker Modal */}
+      <PhotoshopColorPickerModal
+        isOpen={isThemePickerOpen}
+        currentColor={profile.themeColor || DEFAULT_THEME_COLOR}
+        onApplyTheme={handleUpdateTheme}
+        onResetToDefault={handleResetTheme}
+        onClose={() => setIsThemePickerOpen(false)}
+      />
 
       {/* Admin Login / Hub Modal */}
       <AdminLoginModal

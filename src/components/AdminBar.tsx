@@ -1,8 +1,12 @@
 import React from 'react';
 import { PlusCircle, Settings, Mail, ShieldAlert, LogOut, Database } from 'lucide-react';
+import { PhotoshopColorBox } from './PhotoshopColorBox.tsx';
 
 interface AdminBarProps {
   unreadInquiriesCount: number;
+  themeColor?: string;
+  onOpenThemePicker?: () => void;
+  onResetTheme?: () => void;
   onAddNewProject: () => void;
   onOpenProfileSettings: () => void;
   onOpenInquiries: () => void;
@@ -12,6 +16,9 @@ interface AdminBarProps {
 
 export const AdminBar: React.FC<AdminBarProps> = ({
   unreadInquiriesCount,
+  themeColor,
+  onOpenThemePicker,
+  onResetTheme,
   onAddNewProject,
   onOpenProfileSettings,
   onOpenInquiries,
@@ -22,7 +29,7 @@ export const AdminBar: React.FC<AdminBarProps> = ({
     <aside
       aria-label="Admin Control Toolbar"
       id="admin-management-bar"
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-[#0A0E1A]/95 backdrop-blur-xl border border-emerald-500/40 rounded-2xl px-4 py-2.5 shadow-2xl shadow-emerald-950/40 flex items-center gap-2 sm:gap-4 max-w-[95vw] overflow-x-auto"
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-[#0A0E1A]/95 backdrop-blur-xl border border-emerald-500/40 rounded-2xl px-4 py-2.5 shadow-2xl shadow-emerald-950/40 flex items-center gap-2 sm:gap-3 max-w-[95vw] overflow-x-auto"
     >
       <div className="flex items-center gap-2 pr-2 border-r border-[#232E45] shrink-0">
         <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -31,6 +38,19 @@ export const AdminBar: React.FC<AdminBarProps> = ({
           Admin Mode
         </span>
       </div>
+
+      {/* Photoshop Theme Color Box Widget */}
+      {onOpenThemePicker && (
+        <div className="pr-2 border-r border-[#232E45] shrink-0 flex items-center">
+          <PhotoshopColorBox
+            currentColor={themeColor || '#06B6D4'}
+            compact={true}
+            onClick={onOpenThemePicker}
+            onResetToDefault={onResetTheme}
+            showResetButton={true}
+          />
+        </div>
+      )}
 
       <div className="flex items-center gap-2 shrink-0">
         <button

@@ -1,10 +1,62 @@
 @import "tailwindcss";
 
+:root {
+  --theme-primary: #06B6D4;
+  --theme-primary-rgb: 6, 182, 212;
+  --theme-primary-hover: #22D3EE;
+  --theme-primary-active: #0891B2;
+  --theme-primary-text: #FFFFFF;
+  --theme-primary-glow: rgba(6, 182, 212, 0.45);
+  --theme-primary-tint: rgba(6, 182, 212, 0.12);
+  --theme-primary-border: rgba(6, 182, 212, 0.42);
+}
+
 @layer base {
   html {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     scroll-behavior: auto !important;
   }
+}
+
+/* Custom theme dynamic utilities */
+.theme-accent-text {
+  color: var(--theme-primary);
+}
+
+.theme-accent-bg {
+  background-color: var(--theme-primary);
+  color: var(--theme-primary-text);
+}
+
+.theme-accent-border {
+  border-color: var(--theme-primary-border);
+}
+
+.theme-accent-glow {
+  box-shadow: 0 0 24px var(--theme-primary-glow);
+}
+
+.theme-badge {
+  background-color: var(--theme-primary-tint);
+  border: 1px solid var(--theme-primary-border);
+  color: var(--theme-primary);
+}
+
+.theme-gradient-btn {
+  background: var(--theme-primary-gradient);
+  color: var(--theme-primary-text);
+  box-shadow: 0 4px 20px var(--theme-primary-glow);
+}
+
+.theme-gradient-btn:hover {
+  background: var(--theme-button-gradient);
+}
+
+.theme-nav-active {
+  background-color: var(--theme-primary-soft);
+  color: #FFFFFF !important;
+  border: 1px solid var(--theme-primary-border);
+  box-shadow: 0 0 16px var(--theme-primary-glow);
 }
 
 /* Custom subtle scrollbar */
@@ -19,7 +71,7 @@
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3A4A63;
+  background: var(--theme-primary, #3A4A63);
 }
 
 /* Floating bubble upward motion animation with GPU hardware acceleration */

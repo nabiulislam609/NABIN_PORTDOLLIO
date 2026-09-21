@@ -46,7 +46,7 @@ export const MouseGlow: React.FC = () => {
           transform: `translate3d(${pos.x - 280}px, ${pos.y - 280}px, 0)`,
           willChange: 'transform',
           background:
-            'radial-gradient(circle, rgba(58, 74, 99, 0.18) 0%, rgba(35, 46, 69, 0.08) 45%, transparent 70%)',
+            'radial-gradient(circle, rgba(var(--theme-primary-rgb, 58, 74, 99), 0.18) 0%, rgba(35, 46, 69, 0.08) 45%, transparent 70%)',
           filter: 'blur(32px)',
         }}
       />

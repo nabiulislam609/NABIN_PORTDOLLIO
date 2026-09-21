@@ -19,6 +19,7 @@ export interface Project {
 export interface ProfileConfig {
   name: string;
   title: string;
+  themeColor?: string;
   heroDescription: string;
   aboutBio: string;
   workApproach: string;

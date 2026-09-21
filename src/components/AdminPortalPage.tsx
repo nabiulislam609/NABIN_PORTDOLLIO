@@ -23,9 +23,13 @@ import {
   Search,
   MessageSquare,
   Images,
+  Palette,
 } from 'lucide-react';
 import { Project, ProfileConfig, ContactMessage } from '../types.ts';
 import { apiLogin } from '../services/apiService.ts';
+import { PhotoshopColorBox } from './PhotoshopColorBox.tsx';
+import { PhotoshopColorPickerModal } from './PhotoshopColorPickerModal.tsx';
+import { DEFAULT_THEME_COLOR, THEME_PRESETS } from '../utils/theme.ts';
 
 interface AdminPortalPageProps {
   profile: ProfileConfig;
@@ -43,6 +47,8 @@ interface AdminPortalPageProps {
   onOpenBackendDocs: () => void;
   onMarkInquiryRead?: (id: string) => void;
   onDeleteInquiry?: (id: string) => void;
+  onUpdateTheme?: (color: string) => Promise<void> | void;
+  onResetTheme?: () => Promise<void> | void;
 }
 
 export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
@@ -61,6 +67,8 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
   onOpenBackendDocs,
   onMarkInquiryRead,
   onDeleteInquiry,
+  onUpdateTheme,
+  onResetTheme,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'profile' | 'system'>('overview');
   const [password, setPassword] = useState('');
@@ -69,6 +77,7 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [projectSearch, setProjectSearch] = useState('');
   const [inquiryFilter, setInquiryFilter] = useState<'all' | 'unread'>('all');
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   const unreadCount = inquiries.filter((m) => m.status === 'unread').length;
 
@@ -244,6 +253,17 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
         </div>
 
         <div className="flex items-center gap-2.5">
+          {/* Header Theme Swatch widget */}
+          <div className="hidden sm:flex items-center">
+            <PhotoshopColorBox
+              currentColor={profile.themeColor || DEFAULT_THEME_COLOR}
+              compact={true}
+              onClick={() => setIsColorPickerOpen(true)}
+              onResetToDefault={onResetTheme}
+              showResetButton={true}
+            />
+          </div>
+
           <button
             onClick={onOpenProfileSettings}
             className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#151F36] hover:bg-[#1C2844] border border-[#232E45] text-xs font-semibold text-[#F2F5FA] transition-colors cursor-pointer"
@@ -395,6 +415,85 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                   website.com/admin
                 </div>
                 <div className="text-[11px] text-[#AAB8CE] mt-1">Private URL enabled</div>
+              </div>
+            </div>
+
+            {/* Website Theme & Visual Appearance Customizer */}
+            <div className="p-6 rounded-2xl bg-[#0D1424] border border-[#23314D] shadow-lg relative overflow-hidden">
+              <div
+                className="absolute top-0 right-0 w-80 h-80 rounded-full blur-3xl pointer-events-none opacity-20"
+                style={{ backgroundColor: profile.themeColor || DEFAULT_THEME_COLOR }}
+              />
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-[#151F36] border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-inner">
+                      <Palette className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-base font-bold text-white tracking-wide">
+                          Website Theme & Color Palette
+                        </h2>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300">
+                          Live Theme Engine
+                        </span>
+                      </div>
+                      <p className="text-xs text-[#AAB8CE] mt-0.5">
+                        Double-click or click the color box to open the full Color Picker dialog.
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-[#AAB8CE] max-w-xl leading-relaxed">
+                    Personalize your entire portfolio's branding color with zero delay. Changing this accent color automatically updates button gradients, hero credibility indicators, active nav pills, water ripple waves, and cursor glow.
+                  </p>
+
+                  {/* Preset Swatches Palette for quick 1-click preview */}
+                  <div className="pt-2">
+                    <span className="text-[11px] font-semibold text-[#8899B8] block mb-2">
+                      Popular One-Click Palettes:
+                    </span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {THEME_PRESETS.map((preset) => (
+                        <button
+                          key={preset.hex}
+                          type="button"
+                          onClick={() => onUpdateTheme && onUpdateTheme(preset.hex)}
+                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] transition-all cursor-pointer ${
+                            (profile.themeColor || DEFAULT_THEME_COLOR).toLowerCase() === preset.hex.toLowerCase()
+                              ? 'bg-[#1D2A45] border-white/70 text-white font-semibold shadow-sm'
+                              : 'bg-[#151F36] hover:bg-[#1E2B4A] border-[#23314D] text-[#D6E0F0]'
+                          }`}
+                          title={`${preset.name} (${preset.hex})`}
+                        >
+                          <span
+                            className="w-2.5 h-2.5 rounded-full border border-white/40 shadow-sm"
+                            style={{ backgroundColor: preset.hex }}
+                          />
+                          <span>{preset.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Photoshop Color Box Widget with Double-click prompt and Reset button */}
+                <div className="shrink-0 flex flex-col gap-2">
+                  <div className="text-[11px] font-semibold text-[#AAB8CE] flex items-center justify-between">
+                    <span>Active Theme Swatch:</span>
+                    <span className="text-[10px] text-cyan-400">Double-click to customize</span>
+                  </div>
+                  <PhotoshopColorBox
+                    currentColor={profile.themeColor || DEFAULT_THEME_COLOR}
+                    compact={false}
+                    onClick={() => setIsColorPickerOpen(true)}
+                    onDoubleClick={() => setIsColorPickerOpen(true)}
+                    onResetToDefault={onResetTheme}
+                    showResetButton={true}
+                    showLabel={true}
+                  />
+                </div>
               </div>
             </div>
 
@@ -852,6 +951,23 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
           </div>
         )}
       </main>
+
+      {/* Photoshop Color Picker Modal Dialog */}
+      <PhotoshopColorPickerModal
+        isOpen={isColorPickerOpen}
+        currentColor={profile.themeColor || DEFAULT_THEME_COLOR}
+        onApplyTheme={(newColor) => {
+          if (onUpdateTheme) {
+            onUpdateTheme(newColor);
+          }
+        }}
+        onResetToDefault={() => {
+          if (onResetTheme) {
+            onResetTheme();
+          }
+        }}
+        onClose={() => setIsColorPickerOpen(false)}
+      />
     </div>
   );
 };

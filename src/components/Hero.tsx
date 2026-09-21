@@ -14,6 +14,18 @@ export const Hero: React.FC<HeroProps> = ({
   onExplorePortfolio,
   onContactClick,
 }) => {
+  const rawPrimary = profile.title?.includes('|')
+    ? profile.title.split('|')[0]?.trim()
+    : profile.title?.trim();
+  const primaryTitle =
+    !rawPrimary || rawPrimary === 'Digital Marketer'
+      ? 'Data-Driven Digital Marketer'
+      : rawPrimary;
+  const secondaryTitle =
+    (profile.title?.includes('|')
+      ? profile.title.split('|')[1]?.trim()
+      : '') || 'Paid Advertising & SEO Specialist';
+
   return (
     <section
       id="home"
@@ -58,9 +70,9 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Main Headline & Professional Title */}
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#F2F5FA] max-w-4xl leading-[1.15] mb-6 drop-shadow-[0_4px_14px_rgba(0,0,0,0.9)]">
-          <span className="block">{profile.title.split('|')[0]?.trim()}</span>
+          <span className="block">{primaryTitle}</span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D6E0F0] via-[#B8C6DC] to-[#FFFFFF] block text-2xl sm:text-4xl md:text-5xl mt-2 font-bold">
-            {profile.title.split('|')[1]?.trim() || 'Paid Advertising & SEO Specialist'}
+            {secondaryTitle}
           </span>
         </h1>
 

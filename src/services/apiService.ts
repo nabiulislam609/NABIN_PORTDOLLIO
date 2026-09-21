@@ -134,12 +134,20 @@ export async function apiChangePassword(
  * Get Profile
  */
 export async function apiGetProfile(): Promise<ProfileConfig> {
+  const upgradeTitle = (prof: ProfileConfig): ProfileConfig => {
+    if (prof && (!prof.title || prof.title === 'Digital Marketer' || prof.title === 'Digital Marketer | SEO & Paid Advertising Specialist')) {
+      prof.title = 'Data-Driven Digital Marketer | Paid Advertising & SEO Specialist';
+    }
+    return prof;
+  };
+
   try {
     const res = await fetch('/api/profile');
     const data = await safeParseJson<ProfileConfig>(res);
     if (res.ok && data && data.name) {
-      localStorage.setItem(KEYS.PROFILE, JSON.stringify(data));
-      return data;
+      const upgraded = upgradeTitle(data);
+      localStorage.setItem(KEYS.PROFILE, JSON.stringify(upgraded));
+      return upgraded;
     }
   } catch (err) {
     console.warn('Backend profile unreachable, loading from cache:', err);
@@ -149,7 +157,7 @@ export async function apiGetProfile(): Promise<ProfileConfig> {
   if (cached) {
     try {
       const parsed = JSON.parse(cached);
-      if (parsed && parsed.name) return parsed;
+      if (parsed && parsed.name) return upgradeTitle(parsed);
     } catch {}
   }
 

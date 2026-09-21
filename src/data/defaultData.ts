@@ -2,7 +2,7 @@ import { ProfileConfig, Project, ServiceItem } from '../types.ts';
 
 export const DEFAULT_PROFILE: ProfileConfig = {
   name: 'NABIUL ISLAM',
-  title: 'Digital Marketer | SEO & Paid Advertising Specialist',
+  title: 'Data-Driven Digital Marketer | Paid Advertising & SEO Specialist',
   heroDescription:
     'I help businesses improve their online visibility, reach the right audience, and achieve measurable growth through effective digital marketing strategies.',
   aboutBio:

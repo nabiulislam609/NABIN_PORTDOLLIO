@@ -10,7 +10,6 @@ import { Services } from './components/Services.tsx';
 import { Portfolio } from './components/Portfolio.tsx';
 import { Contact } from './components/Contact.tsx';
 import { Footer } from './components/Footer.tsx';
-import { AdminBar } from './components/AdminBar.tsx';
 import { AdminLoginModal } from './components/AdminLoginModal.tsx';
 import { AdminPortalPage } from './components/AdminPortalPage.tsx';
 import { ProfileEditModal } from './components/ProfileEditModal.tsx';
@@ -297,7 +296,7 @@ export default function App() {
             {/* Portfolio Section */}
             <Portfolio
               projects={projects}
-              isAdmin={isAdmin}
+              isAdmin={false}
               onSaveProject={handleSaveProject}
               onDeleteProject={handleDeleteProject}
               onResetProjects={handleResetProjects}
@@ -329,21 +328,6 @@ export default function App() {
             onNavigateToAdmin={navigateToAdmin}
             onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
           />
-
-          {/* Admin Floating Control Bar (only visible when logged in and browsing public view) */}
-          {isAdmin && (
-            <AdminBar
-              unreadInquiriesCount={inquiries.filter((m) => m.status === 'unread').length}
-              onAddNewProject={() => {
-                setEditingProject(null);
-                setIsProjectFormOpen(true);
-              }}
-              onOpenProfileSettings={() => setIsProfileEditOpen(true)}
-              onOpenInquiries={navigateToAdmin}
-              onOpenBackendDocs={() => setIsBackendDocsOpen(true)}
-              onLogout={handleLogout}
-            />
-          )}
         </>
       )}
 

@@ -180,14 +180,6 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-
-              {/* Initial password hint */}
-              <div className="mt-3 text-[11px] text-[#AAB8CE] flex items-center gap-2 bg-[#151F36]/60 p-2.5 rounded-lg border border-[#232E45]">
-                <Key className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                <span>
-                  Initial password: <code className="text-cyan-300 font-bold bg-[#0A0E1A] px-1.5 py-0.5 rounded border border-[#232E45]">admin</code> (change anytime in Profile Settings)
-                </span>
-              </div>
             </div>
 
             <div className="pt-3">

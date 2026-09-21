@@ -4,7 +4,6 @@ import {
   X,
   Lock,
   ShieldCheck,
-  Key,
   Eye,
   EyeOff,
   AlertCircle,
@@ -314,14 +313,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({
                       <Eye className="w-4 h-4" />
                     )}
                   </button>
-                </div>
-
-                {/* Helpful credential hint for initial setup */}
-                <div className="mt-2 text-[11px] text-[#AAB8CE] flex items-center gap-1.5 bg-[#1A2438]/60 p-2.5 rounded-lg border border-[#232E45]">
-                  <Key className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-                  <span>
-                    Default initial password: <code className="text-cyan-300 font-bold bg-[#0A0E1A] px-1.5 py-0.5 rounded border border-[#232E45]">admin</code> (changeable in Profile Settings)
-                  </span>
                 </div>
               </div>
 

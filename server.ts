@@ -83,7 +83,7 @@ function getAuthData(): AuthData {
     console.error('Error reading auth.json:', e);
   }
   const defaultAuth: AuthData = {
-    adminPassword: 'admin', // Simple default for demo/portfolio owner, editable in UI
+    adminPassword: 'NABIN', // Master administrator password
     sessionSecret: 'portfolio_admin_token_' + Math.random().toString(36).substring(2),
   };
   fs.writeFileSync(AUTH_FILE, JSON.stringify(defaultAuth, null, 2));

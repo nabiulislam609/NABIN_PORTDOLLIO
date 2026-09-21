@@ -4,6 +4,7 @@ import { ProfileConfig } from '../types.ts';
 import { scrollToElement } from '../utils/scroll.ts';
 import { PhotoshopColorBox } from './PhotoshopColorBox.tsx';
 import { DEFAULT_THEME_COLOR } from '../utils/theme.ts';
+import { BrandLogo } from './BrandLogo.tsx';
 
 interface NavbarProps {
   profile: ProfileConfig;
@@ -112,8 +113,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           id="nav-logo"
           title={profile.name}
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#3A4A63] to-[#1A2438] border border-[#B8C6DC]/30 flex items-center justify-center text-[#F2F5FA] font-bold text-lg shadow-md group-hover:border-[#B8C6DC]/60 transition-colors">
-            {profile.name.charAt(0)}
+          <div className="w-10 h-10 rounded-xl overflow-hidden border border-[#2B3B5C] group-hover:border-cyan-400/50 shadow-md group-hover:shadow-cyan-500/20 transition-all duration-200 shrink-0 bg-[#0B1528] flex items-center justify-center">
+            <BrandLogo size={40} showText={false} alt={profile.name} />
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-[#F2F5FA] tracking-tight text-base sm:text-lg flex items-center gap-1.5 group-hover:text-white transition-colors">

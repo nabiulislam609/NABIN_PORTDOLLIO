@@ -31,6 +31,7 @@ import { apiLogin } from '../services/apiService.ts';
 import { PhotoshopColorBox } from './PhotoshopColorBox.tsx';
 import { PhotoshopColorPickerModal } from './PhotoshopColorPickerModal.tsx';
 import { DEFAULT_THEME_COLOR, DEFAULT_BACKGROUND_COLOR, normalizeHex, THEME_PRESETS } from '../utils/theme.ts';
+import { BrandLogo } from './BrandLogo.tsx';
 
 interface AdminPortalPageProps {
   profile: ProfileConfig;
@@ -148,8 +149,8 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
         {/* Portal card */}
         <div className="relative z-10 w-full max-w-md bg-[#0D1424] border border-[#23314D] rounded-2xl p-6 sm:p-8 shadow-2xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#1A2438] border border-cyan-500/40 text-cyan-400 flex items-center justify-center shadow-inner">
-              <Lock className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-xl overflow-hidden border border-[#2B3B5C] bg-[#0B1528] flex items-center justify-center shadow-lg shrink-0">
+              <BrandLogo size={48} showText={false} alt={profile.name} />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -247,8 +248,8 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
           <div className="h-5 w-px bg-[#232E45]" />
 
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center text-emerald-400 shadow-sm">
-              <ShieldCheck className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden border border-[#2B3B5C] bg-[#0B1528] flex items-center justify-center shrink-0 shadow-sm">
+              <BrandLogo size={32} showText={false} alt={profile.name} />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -263,38 +264,51 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Header Background Color Swatch & Reset (Admin Only) */}
-          {onOpenBgColorPlate && (
-            <div className="flex items-center gap-1.5" id="admin-header-bg-controls">
-              <button
-                type="button"
-                onClick={onOpenBgColorPlate}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#151F36] hover:bg-[#1C2844] border border-[#232E45] hover:border-cyan-400/50 text-xs font-semibold text-[#F2F5FA] transition-all cursor-pointer shadow-sm"
-                title="Change Website Background Color"
-                id="portal-bg-plate-btn"
-              >
-                <div
-                  className="w-3.5 h-3.5 rounded-full border border-white/70 shadow-sm shrink-0"
-                  style={{ backgroundColor: bgHex }}
-                />
-                <Palette className="w-3.5 h-3.5 text-cyan-400" />
-                <span>BG Color</span>
-              </button>
+          {/* Header Marked Area: Brand Logo & Background Color Controls (Admin Only) */}
+          <div className="flex items-center gap-2 p-1 pl-2 pr-1.5 rounded-xl bg-[#111A2E] border border-[#232E45] shadow-inner" id="admin-marked-area-header">
+            {/* Logo in Marked Area */}
+            <div className="flex items-center gap-1.5" title="Active Website Logo">
+              <div className="w-6 h-6 rounded-md overflow-hidden bg-[#0A101D] border border-cyan-500/40 shrink-0 flex items-center justify-center">
+                <BrandLogo size={24} showText={false} alt="Brand Logo" />
+              </div>
+              <span className="hidden lg:inline text-[11px] font-semibold text-[#8899B8]">Logo</span>
+            </div>
 
-              {isCustomBg && onResetBgColor && (
+            <div className="h-4 w-px bg-[#232E45]" />
+
+            {/* Header Background Color Swatch & Reset (Admin Only) */}
+            {onOpenBgColorPlate && (
+              <div className="flex items-center gap-1.5" id="admin-header-bg-controls">
                 <button
                   type="button"
-                  onClick={onResetBgColor}
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 hover:text-white transition-colors cursor-pointer text-xs font-semibold shadow-sm"
-                  title="Reset Background to Default (#0A0E1A)"
-                  id="portal-reset-bg-btn"
+                  onClick={onOpenBgColorPlate}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#151F36] hover:bg-[#1C2844] border border-[#232E45] hover:border-cyan-400/50 text-xs font-semibold text-[#F2F5FA] transition-all cursor-pointer shadow-sm"
+                  title="Change Website Background Color"
+                  id="portal-bg-plate-btn"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset</span>
+                  <div
+                    className="w-3.5 h-3.5 rounded-full border border-white/70 shadow-sm shrink-0"
+                    style={{ backgroundColor: bgHex }}
+                  />
+                  <Palette className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>BG Color</span>
                 </button>
-              )}
-            </div>
-          )}
+
+                {isCustomBg && onResetBgColor && (
+                  <button
+                    type="button"
+                    onClick={onResetBgColor}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 hover:text-white transition-colors cursor-pointer text-xs font-semibold shadow-sm"
+                    title="Reset Background to Default (#0A0E1A)"
+                    id="portal-reset-bg-btn"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span className="hidden sm:inline">Reset</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Header Theme Swatch widget */}
           <div className="hidden sm:flex items-center">
@@ -538,59 +552,66 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                   />
                 </div>
 
-                {/* Website Background Color Widget (Admin Exclusive) */}
-                {onOpenBgColorPlate && (
-                  <div className="shrink-0 flex flex-col gap-2">
-                    <div className="text-[11px] font-semibold text-[#AAB8CE] flex items-center justify-between">
-                      <span>Website Background Color:</span>
-                      <span className="text-[10px] text-cyan-400">Color Plate</span>
+                {/* Website Background Color & Brand Logo Widget (Admin Exclusive Marked Area) */}
+                <div className="shrink-0 flex flex-col gap-2" id="overview-marked-area-card">
+                  <div className="text-[11px] font-semibold text-[#AAB8CE] flex items-center justify-between">
+                    <span>Website Branding & Color:</span>
+                    <span className="text-[10px] text-cyan-400 font-mono">Marked Admin Area</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-[#151F36] border border-[#232E45] flex items-center gap-3">
+                    {/* Logo in Overview Marked Area */}
+                    <div className="w-10 h-10 rounded-lg overflow-hidden border border-cyan-500/40 bg-[#0A101D] shadow-sm shrink-0 flex items-center justify-center" title="Website Brand Logo">
+                      <BrandLogo size={36} showText={false} alt="Brand Logo" />
                     </div>
-                    <div className="p-2.5 rounded-xl bg-[#151F36] border border-[#232E45] flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-lg border-2 border-white/70 shadow-sm shrink-0 cursor-pointer flex items-center justify-center hover:scale-105 transition-transform"
-                        style={{ backgroundColor: bgHex }}
-                        onClick={onOpenBgColorPlate}
-                        title="Click to open Background Color Plate"
-                      >
-                        <Palette className="w-4 h-4 text-white/90 drop-shadow" />
-                      </div>
 
-                      <div className="min-w-0 pr-1">
-                        <div className="text-xs font-bold text-white leading-tight">
-                          {isCustomBg ? 'Custom Color' : 'Default Dark'}
-                        </div>
-                        <div className="text-[10px] font-mono text-cyan-400 uppercase mt-0.5">
-                          {bgHex}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 ml-auto">
-                        <button
-                          type="button"
+                    {onOpenBgColorPlate && (
+                      <>
+                        <div
+                          className="w-10 h-10 rounded-lg border-2 border-white/70 shadow-sm shrink-0 cursor-pointer flex items-center justify-center hover:scale-105 transition-transform"
+                          style={{ backgroundColor: bgHex }}
                           onClick={onOpenBgColorPlate}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1D2A45] hover:bg-[#26375A] border border-[#2B3B5C] text-xs font-semibold text-white transition-colors cursor-pointer shadow-sm"
-                          id="overview-bg-plate-btn"
+                          title="Click to open Background Color Plate"
                         >
-                          <Palette className="w-3.5 h-3.5 text-cyan-400" />
-                          <span>BG Color</span>
-                        </button>
+                          <Palette className="w-4 h-4 text-white/90 drop-shadow" />
+                        </div>
 
-                        {isCustomBg && onResetBgColor && (
+                        <div className="min-w-0 pr-1">
+                          <div className="text-xs font-bold text-white leading-tight">
+                            {isCustomBg ? 'Custom Color' : 'Default Dark'}
+                          </div>
+                          <div className="text-[10px] font-mono text-cyan-400 uppercase mt-0.5">
+                            {bgHex}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 ml-auto">
                           <button
                             type="button"
-                            onClick={onResetBgColor}
-                            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 hover:text-white transition-colors cursor-pointer text-xs font-semibold shadow-sm"
-                            title="Reset background color to default (#0A0E1A)"
-                            id="overview-reset-bg-btn"
+                            onClick={onOpenBgColorPlate}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1D2A45] hover:bg-[#26375A] border border-[#2B3B5C] text-xs font-semibold text-white transition-colors cursor-pointer shadow-sm"
+                            id="overview-bg-plate-btn"
                           >
-                            <RotateCcw className="w-3.5 h-3.5" />
-                            <span>Reset</span>
+                            <Palette className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>BG Color</span>
                           </button>
-                        )}
-                      </div>
-                    </div>
+
+                          {isCustomBg && onResetBgColor && (
+                            <button
+                              type="button"
+                              onClick={onResetBgColor}
+                              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 hover:text-white transition-colors cursor-pointer text-xs font-semibold shadow-sm"
+                              title="Reset background color to default (#0A0E1A)"
+                              id="overview-reset-bg-btn"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                              <span>Reset</span>
+                            </button>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
 
@@ -1002,7 +1023,40 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+                  {/* Website Brand Logo - Marked Area */}
+                  <div className="p-4 rounded-xl bg-[#151F36] border border-[#232E45] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#D0DBEA] block">Website Logo</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-300">
+                        Marked Area
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-cyan-500/40 bg-[#0B1528] shadow-md flex items-center justify-center shrink-0">
+                        <BrandLogo size={46} showText={false} alt="Brand Logo" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold text-white leading-tight">
+                          Nabiul Islam Emblem
+                        </div>
+                        <div className="text-[10px] text-emerald-400 flex items-center gap-1 mt-0.5">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Active on Navbar, Footer & Tab</span>
+                        </div>
+                        <a
+                          href="/logo.svg"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] text-cyan-400 hover:underline flex items-center gap-1 mt-1 font-mono"
+                        >
+                          <ExternalLink className="w-2.5 h-2.5" />
+                          <span>View logo.svg</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Theme Accent Color */}
                   <div className="p-4 rounded-xl bg-[#151F36] border border-[#232E45] space-y-2.5">
                     <span className="text-xs font-semibold text-[#D0DBEA] block">Theme Accent Color</span>

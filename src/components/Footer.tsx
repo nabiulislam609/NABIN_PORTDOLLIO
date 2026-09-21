@@ -11,6 +11,7 @@ import {
   Phone,
 } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
+import { BrandLogo } from './BrandLogo.tsx';
 
 interface FooterProps {
   profile: ProfileConfig;
@@ -41,8 +42,8 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Identity & Mission */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#3A4A63] to-[#1A2438] border border-[#B8C6DC]/30 flex items-center justify-center text-[#F2F5FA] font-bold text-lg">
-                {profile.name.charAt(0)}
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-[#2B3B5C] shadow-md shrink-0 bg-[#0B1528] flex items-center justify-center">
+                <BrandLogo size={40} showText={false} alt={profile.name} />
               </div>
               <span className="font-bold text-lg text-white tracking-tight">
                 {profile.name}

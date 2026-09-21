@@ -22,6 +22,7 @@ import {
   RefreshCw,
   Search,
   MessageSquare,
+  Images,
 } from 'lucide-react';
 import { Project, ProfileConfig, ContactMessage } from '../types.ts';
 import { apiLogin } from '../services/apiService.ts';
@@ -548,6 +549,12 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                     <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0A0E1A]/85 backdrop-blur-md border border-[#232E45] text-[10px] font-bold text-cyan-300 uppercase tracking-wider">
                       {project.category}
                     </div>
+                    {project.images && project.images.length > 0 && (
+                      <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-[#0A0E1A]/90 backdrop-blur-md border border-[#232E45] text-[10px] font-semibold text-cyan-300 flex items-center gap-1 shadow">
+                        <Images className="w-3 h-3 text-cyan-400" />
+                        <span>{project.images.length + (project.image ? 1 : 0)} photos</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Body */}

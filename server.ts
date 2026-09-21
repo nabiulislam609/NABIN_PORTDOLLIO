@@ -182,7 +182,7 @@ async function startServer() {
   });
 
   app.post('/api/projects', requireAdmin, (req: Request, res: Response) => {
-    const { title, category, image, description, goals, workCompleted, results, projectUrl, date, clientIndustry, strategy, toolsUsed, featured } = req.body;
+    const { title, category, image, images, description, goals, workCompleted, results, projectUrl, date, clientIndustry, strategy, toolsUsed, featured } = req.body;
 
     if (!title || !category || !description) {
       return res.status(400).json({ error: 'Title, Category, and Description are required' });
@@ -194,6 +194,7 @@ async function startServer() {
       title: title.trim(),
       category: category.trim(),
       image: image?.trim() || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+      images: Array.isArray(images) ? images.filter(Boolean) : [],
       description: description.trim(),
       goals: goals?.trim() || '',
       workCompleted: Array.isArray(workCompleted) ? workCompleted : typeof workCompleted === 'string' ? workCompleted.split('\n').filter(Boolean) : [],
@@ -220,13 +221,14 @@ async function startServer() {
       return res.status(404).json({ error: 'Project not found' });
     }
 
-    const { title, category, image, description, goals, workCompleted, results, projectUrl, date, clientIndustry, strategy, toolsUsed, featured } = req.body;
+    const { title, category, image, images, description, goals, workCompleted, results, projectUrl, date, clientIndustry, strategy, toolsUsed, featured } = req.body;
 
     const updatedProject: Project = {
       ...projects[index],
       title: title !== undefined ? title.trim() : projects[index].title,
       category: category !== undefined ? category.trim() : projects[index].category,
       image: image !== undefined ? image.trim() : projects[index].image,
+      images: images !== undefined ? (Array.isArray(images) ? images.filter(Boolean) : []) : projects[index].images || [],
       description: description !== undefined ? description.trim() : projects[index].description,
       goals: goals !== undefined ? goals.trim() : projects[index].goals,
       workCompleted: Array.isArray(workCompleted)

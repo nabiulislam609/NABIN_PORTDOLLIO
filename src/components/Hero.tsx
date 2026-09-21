@@ -1,5 +1,17 @@
 import React from 'react';
-import { ArrowRight, ChevronDown, CheckCircle2, TrendingUp, DollarSign, Award, Target } from 'lucide-react';
+import {
+  ArrowRight,
+  ChevronDown,
+  CheckCircle2,
+  TrendingUp,
+  DollarSign,
+  Award,
+  Target,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Github,
+} from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 import { scrollToElement } from '../utils/scroll.ts';
 
@@ -82,7 +94,7 @@ export const Hero: React.FC<HeroProps> = ({
         </p>
 
         {/* Call-to-action buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-16">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-6">
           <button
             onClick={onExplorePortfolio}
             className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#232E45] via-[#3A4A63] to-[#4D6282] hover:from-[#3A4A63] hover:to-[#5E769B] text-[#F2F5FA] font-semibold text-sm sm:text-base border border-[#B8C6DC]/30 shadow-lg shadow-black/40 flex items-center justify-center gap-2 transition-all duration-200 group"
@@ -100,6 +112,62 @@ export const Hero: React.FC<HeroProps> = ({
             Contact Me
           </button>
         </div>
+
+        {/* Social Media Quick Links */}
+        {(profile.socials?.linkedin ||
+          profile.socials?.facebook ||
+          profile.socials?.instagram ||
+          profile.socials?.github) && (
+          <div className="flex items-center justify-center gap-2.5 mb-14">
+            <span className="text-xs text-[#AAB8CE] font-medium tracking-wide mr-1">
+              Connect:
+            </span>
+            {profile.socials.linkedin && (
+              <a
+                href={profile.socials.linkedin}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="LinkedIn Profile"
+                className="w-9 h-9 rounded-xl bg-[#0A0E1A]/80 hover:bg-[#1A2438] border border-[#232E45] hover:border-cyan-400/50 text-[#AAB8CE] hover:text-cyan-400 flex items-center justify-center transition-all shadow-sm hover:scale-105"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+            )}
+            {profile.socials.facebook && (
+              <a
+                href={profile.socials.facebook}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Facebook Profile"
+                className="w-9 h-9 rounded-xl bg-[#0A0E1A]/80 hover:bg-[#1A2438] border border-[#232E45] hover:border-blue-400/50 text-[#AAB8CE] hover:text-blue-400 flex items-center justify-center transition-all shadow-sm hover:scale-105"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+            )}
+            {profile.socials.instagram && (
+              <a
+                href={profile.socials.instagram}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Instagram Profile"
+                className="w-9 h-9 rounded-xl bg-[#0A0E1A]/80 hover:bg-[#1A2438] border border-[#232E45] hover:border-pink-400/50 text-[#AAB8CE] hover:text-pink-400 flex items-center justify-center transition-all shadow-sm hover:scale-105"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+            )}
+            {profile.socials.github && (
+              <a
+                href={profile.socials.github}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="GitHub Profile"
+                className="w-9 h-9 rounded-xl bg-[#0A0E1A]/80 hover:bg-[#1A2438] border border-[#232E45] hover:border-white/50 text-[#AAB8CE] hover:text-white flex items-center justify-center transition-all shadow-sm hover:scale-105"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        )}
 
         {/* Metric / Stat Pillars */}
         <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl text-left">

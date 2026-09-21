@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Eye, Edit3, Trash2, TrendingUp, Calendar, Tag } from 'lucide-react';
+import { ExternalLink, Eye, Edit3, Trash2, TrendingUp, Calendar, Tag, Images } from 'lucide-react';
 import { Project } from '../types.ts';
 
 interface ProjectCardProps {
@@ -58,6 +58,14 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         >
           <Eye className="w-5 h-5" />
         </button>
+
+        {/* Gallery Count Badge if multiple images exist */}
+        {project.images && project.images.length > 0 && (
+          <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-lg bg-[#0A0E1A]/85 backdrop-blur-md border border-[#232E45] text-[10px] font-semibold text-cyan-300 flex items-center gap-1 shadow-md">
+            <Images className="w-3 h-3 text-cyan-400" />
+            <span>{project.images.length + (project.image ? 1 : 0)} Visuals</span>
+          </div>
+        )}
       </div>
 
       {/* Card Content */}

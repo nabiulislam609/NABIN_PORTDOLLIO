@@ -1,6 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Save, User, Image, Mail, Phone, MapPin, Globe, Lock, Check, AlertCircle, CheckCircle2, Upload, Trash2, Camera } from 'lucide-react';
+import {
+  X,
+  Save,
+  User,
+  Image,
+  Mail,
+  Phone,
+  MapPin,
+  Globe,
+  Lock,
+  Check,
+  AlertCircle,
+  CheckCircle2,
+  Upload,
+  Trash2,
+  Camera,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Github,
+} from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 import { processImageFile } from '../utils/imageUtils.ts';
 
@@ -527,6 +547,90 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   className="w-full px-3.5 py-2 rounded-xl bg-[#1A2438] border border-[#232E45] text-xs text-white focus:outline-none focus:border-cyan-400"
                 />
+              </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="p-4 rounded-xl bg-[#1A2438]/50 border border-[#232E45]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#B8C6DC] block mb-3">
+                Social Media & Channels
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-[11px] text-[#AAB8CE] mb-1 flex items-center gap-1.5">
+                    <Linkedin className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>LinkedIn URL</span>
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://linkedin.com/..."
+                    value={formData.socials?.linkedin || ''}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        socials: { ...formData.socials, linkedin: e.target.value },
+                      })
+                    }
+                    className="w-full px-3 py-1.5 rounded-lg bg-[#0A0E1A] border border-[#232E45] text-xs text-white focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] text-[#AAB8CE] mb-1 flex items-center gap-1.5">
+                    <Facebook className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Facebook URL</span>
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://facebook.com/..."
+                    value={formData.socials?.facebook || ''}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        socials: { ...formData.socials, facebook: e.target.value },
+                      })
+                    }
+                    className="w-full px-3 py-1.5 rounded-lg bg-[#0A0E1A] border border-[#232E45] text-xs text-white focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] text-[#AAB8CE] mb-1 flex items-center gap-1.5">
+                    <Instagram className="w-3.5 h-3.5 text-pink-400" />
+                    <span>Instagram URL</span>
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://instagram.com/..."
+                    value={formData.socials?.instagram || ''}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        socials: { ...formData.socials, instagram: e.target.value },
+                      })
+                    }
+                    className="w-full px-3 py-1.5 rounded-lg bg-[#0A0E1A] border border-[#232E45] text-xs text-white focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] text-[#AAB8CE] mb-1 flex items-center gap-1.5">
+                    <Github className="w-3.5 h-3.5 text-gray-300" />
+                    <span>GitHub URL</span>
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://github.com/..."
+                    value={formData.socials?.github || ''}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        socials: { ...formData.socials, github: e.target.value },
+                      })
+                    }
+                    className="w-full px-3 py-1.5 rounded-lg bg-[#0A0E1A] border border-[#232E45] text-xs text-white focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
               </div>
             </div>
 

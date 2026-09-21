@@ -1,7 +1,7 @@
 import { ProfileConfig, Project, ServiceItem } from '../types.ts';
 
 export const DEFAULT_PROFILE: ProfileConfig = {
-  name: 'NABIUL ISLAM',
+  name: 'Nabiul Islam Nabin',
   title: 'Data-Driven Digital Marketer | Paid Advertising & SEO Specialist',
   heroDescription:
     'I help businesses improve their online visibility, reach the right audience, and achieve measurable growth through effective digital marketing strategies.',
@@ -24,16 +24,16 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   heroImageOpacity: 75,
   profileImage:
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=900&auto=format&fit=crop',
-  email: 'contact@nabiulislam.marketing',
-  phone: '+880 1712 345678',
-  whatsapp: '+8801712345678',
-  location: 'Dhaka, Bangladesh',
+  email: 'nabiulislam609@gmail.com',
+  phone: '+880156009961',
+  whatsapp: '+8801560009961',
+  location: 'Joypurhat, Rajshahi, Bangladesh',
   socials: {
-    linkedin: 'https://linkedin.com',
-    twitter: 'https://twitter.com',
-    facebook: 'https://facebook.com',
-    instagram: 'https://instagram.com',
-    github: 'https://github.com',
+    linkedin: 'https://www.linkedin.com/company/agencydatadrivendigital',
+    twitter: '',
+    facebook: 'https://www.facebook.com/nabiulislam609/',
+    instagram: 'https://www.instagram.com/nabiulislam609/',
+    github: 'https://github.com/nabiulislam609',
   },
   stats: {
     yearsExperience: '6+ Years',
@@ -262,6 +262,12 @@ export const DEFAULT_PROJECTS: Project[] = [
     category: 'Meta Ads',
     image:
       'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=1200&auto=format&fit=crop',
+    ],
     description:
       'Transformed a boutique apparel brand into an international direct-to-consumer powerhouse using full-funnel Meta advertising and dynamic catalog ads.',
     goals:
@@ -287,6 +293,11 @@ export const DEFAULT_PROJECTS: Project[] = [
     category: 'Google Ads',
     image:
       'https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1533750516457-a7f992034fec?q=80&w=1200&auto=format&fit=crop',
+    ],
     description:
       'Designed high-intent Google Search and Performance Max campaigns for an enterprise cloud collaboration software provider.',
     goals:
@@ -312,6 +323,11 @@ export const DEFAULT_PROJECTS: Project[] = [
     category: 'Local SEO',
     image:
       'https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1200&auto=format&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop',
+    ],
     description:
       'Executed a hyper-local SEO & Google Business Profile revitalization across 4 clinic branches in a highly competitive metro area.',
     goals:

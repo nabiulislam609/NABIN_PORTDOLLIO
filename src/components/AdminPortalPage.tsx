@@ -81,7 +81,7 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
       if (res.token) {
         onLoginSuccess(res.token);
       } else {
-        setLoginError('Invalid administrator credentials.');
+        setLoginError(res.error || 'Invalid administrator credentials.');
       }
     } catch {
       setLoginError('Connection failure or invalid password.');

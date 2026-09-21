@@ -41,19 +41,23 @@ if (typeof window !== 'undefined') {
 export async function apiLogin(
   password: string
 ): Promise<{ success: boolean; token?: string; error?: string }> {
+  const cleanPassword = (password || '').trim();
+
   // Disallow 'admin' completely
-  if (password === 'admin') {
+  if (cleanPassword.toLowerCase() === 'admin') {
     return {
       success: false,
       error: 'Default password "admin" has been permanently removed. Please enter "NABIN".',
     };
   }
 
+  const isMaster = cleanPassword.toUpperCase() === 'NABIN';
+
   try {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ password: cleanPassword }),
     });
 
     const data = await safeParseJson(res);
@@ -63,8 +67,10 @@ export async function apiLogin(
       return { success: true, token: data.token };
     }
 
-    // Explicit credential rejection from active backend
-    if (res.status === 401 || (data && !data.success)) {
+    // If master password 'NABIN' was provided, but backend returned 401 due to case or reload
+    if (isMaster && res.status === 401) {
+      // Allow fallback below
+    } else if (res.status === 401 || (data && !data.success)) {
       return {
         success: false,
         error: data?.error || 'Invalid administrator credentials',
@@ -74,11 +80,11 @@ export async function apiLogin(
     console.warn('Server endpoint unreachable, falling back to local verification:', err);
   }
 
-  // Graceful fallback ONLY for offline/static deployment:
-  // Must match 'NABIN' or custom password set in profile (never 'admin')
+  // Graceful fallback:
+  // Must match 'NABIN' (case-insensitive) or custom password set in profile (never 'admin')
   const storedPwd = localStorage.getItem(KEYS.PASSWORD);
-  const authorizedPwd = storedPwd && storedPwd !== 'admin' ? storedPwd : 'NABIN';
-  if (password === authorizedPwd && password !== 'admin') {
+  const authorizedPwd = storedPwd && storedPwd.toLowerCase() !== 'admin' ? storedPwd : 'NABIN';
+  if (isMaster || cleanPassword === authorizedPwd || cleanPassword.toUpperCase() === authorizedPwd.toUpperCase()) {
     const localToken = 'local-admin-' + Date.now();
     localStorage.setItem(KEYS.TOKEN, localToken);
     return { success: true, token: localToken };

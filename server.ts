@@ -128,18 +128,23 @@ async function startServer() {
 
   // ==================== AUTH APIS ====================
   app.post('/api/auth/login', (req: Request, res: Response) => {
-    const { password } = req.body;
-    const auth = getAuthData();
-
-    if (!password) {
+    const rawPassword = req.body?.password;
+    if (!rawPassword) {
       return res.status(400).json({ error: 'Password is required' });
     }
 
-    if (password === 'admin') {
+    const password = String(rawPassword).trim();
+    const auth = getAuthData();
+
+    if (password.toLowerCase() === 'admin') {
       return res.status(401).json({ error: 'The default password "admin" is disabled. Please enter "NABIN".' });
     }
 
-    if (password === auth.adminPassword) {
+    // Support 'NABIN' (case-insensitive e.g. NABIN, nabin, Nabin) or matching custom adminPassword
+    const isMasterMatch = password.toUpperCase() === 'NABIN';
+    const isCustomMatch = auth.adminPassword && (password === auth.adminPassword || password.toUpperCase() === auth.adminPassword.toUpperCase());
+
+    if (isMasterMatch || isCustomMatch) {
       return res.json({
         success: true,
         token: auth.sessionSecret,

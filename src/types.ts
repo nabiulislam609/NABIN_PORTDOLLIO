@@ -53,6 +53,8 @@ export interface ServiceItem {
   shortDescription: string;
   fullDescription: string;
   iconName: string;
+  brandLogo?: string;
+  brandColor?: string;
   deliverables: string[];
   tools: string[];
   typicalOutcomes: string;

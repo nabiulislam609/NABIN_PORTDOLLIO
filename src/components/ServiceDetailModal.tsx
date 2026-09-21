@@ -49,12 +49,34 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
         {/* Modal Header */}
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-[#1A2438] border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-            <Sparkles className="w-6 h-6" />
+          <div
+            className="w-12 h-12 rounded-xl bg-[#1A2438] border border-cyan-500/30 flex items-center justify-center p-2.5 text-cyan-400 shadow-inner shrink-0"
+            style={
+              service.brandColor
+                ? {
+                    borderColor: `${service.brandColor}55`,
+                    backgroundColor: `${service.brandColor}12`,
+                  }
+                : undefined
+            }
+          >
+            {service.brandLogo ? (
+              <img
+                src={service.brandLogo}
+                alt={`${service.title} logo`}
+                className="w-7 h-7 object-contain filter drop-shadow"
+                referrerPolicy="no-referrer"
+              />
+            ) : (
+              <Sparkles className="w-6 h-6" />
+            )}
           </div>
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-              Service Scope & Deliverables
+            <span
+              className="text-xs font-semibold uppercase tracking-wider text-cyan-400"
+              style={service.brandColor ? { color: service.brandColor } : undefined}
+            >
+              {service.category || 'Service Scope & Deliverables'}
             </span>
             <h3 id="service-modal-title" className="text-2xl font-bold text-[#F2F5FA]">
               {service.title}

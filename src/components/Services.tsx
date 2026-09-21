@@ -11,6 +11,7 @@ import {
   Code,
   FileText,
   ExternalLink,
+  UserCheck,
   Layers,
   ArrowUpRight,
 } from 'lucide-react';
@@ -21,6 +22,28 @@ import { ServiceDetailModal } from './ServiceDetailModal.tsx';
 interface ServicesProps {
   onSelectServiceForInquiry: (serviceTitle: string) => void;
 }
+
+// Sub-component to safely render brand logo with graceful fallback to Lucide icon
+const ServiceBrandLogo: React.FC<{
+  service: ServiceItem;
+  renderFallbackIcon: (name: string) => React.ReactNode;
+}> = ({ service, renderFallbackIcon }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (service.brandLogo && !hasError) {
+    return (
+      <img
+        src={service.brandLogo}
+        alt={`${service.title} logo`}
+        className="w-6 h-6 object-contain filter drop-shadow transition-transform duration-300 group-hover:scale-110"
+        referrerPolicy="no-referrer"
+        onError={() => setHasError(true)}
+      />
+    );
+  }
+
+  return <>{renderFallbackIcon(service.iconName)}</>;
+};
 
 export const Services: React.FC<ServicesProps> = ({ onSelectServiceForInquiry }) => {
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
@@ -51,6 +74,8 @@ export const Services: React.FC<ServicesProps> = ({ onSelectServiceForInquiry })
         return <FileText {...props} className="w-6 h-6 text-emerald-300 group-hover:scale-110" />;
       case 'ExternalLink':
         return <ExternalLink {...props} className="w-6 h-6 text-violet-400 group-hover:scale-110" />;
+      case 'UserCheck':
+        return <UserCheck {...props} className="w-6 h-6 text-emerald-400 group-hover:scale-110" />;
       default:
         return <Layers {...props} className="w-6 h-6 text-cyan-400 group-hover:scale-110" />;
     }
@@ -85,8 +110,18 @@ export const Services: React.FC<ServicesProps> = ({ onSelectServiceForInquiry })
               {/* Card top: Icon & Category badge */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#232E45]/60 border border-[#3A4A63]/50 flex items-center justify-center p-2.5">
-                    {renderIcon(service.iconName)}
+                  <div
+                    className="w-12 h-12 rounded-xl bg-[#232E45]/60 border border-[#3A4A63]/50 flex items-center justify-center p-2.5 transition-all duration-300 group-hover:scale-105"
+                    style={
+                      service.brandColor
+                        ? {
+                            borderColor: `${service.brandColor}55`,
+                            boxShadow: `0 0 20px ${service.brandColor}15`,
+                          }
+                        : undefined
+                    }
+                  >
+                    <ServiceBrandLogo service={service} renderFallbackIcon={renderIcon} />
                   </div>
                   <span className="text-[11px] font-semibold text-[#B8C6DC] uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#0A0E1A]/60 border border-[#232E45]">
                     {String(index + 1).padStart(2, '0')}

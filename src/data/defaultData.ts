@@ -53,6 +53,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'End-to-end Meta (Facebook & Instagram) paid campaigns from creative angle ideation and audience persona modeling to dynamic catalog retargeting and automated rule-based bid scaling.',
     iconName: 'Megaphone',
+    brandLogo: 'https://cdn.simpleicons.org/meta/0081FB',
+    brandColor: '#0081FB',
     deliverables: [
       'Full-funnel TOFU/MOFU/BOFU campaign structure',
       'Lookalike, custom, and interest audience research',
@@ -72,6 +74,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Precision search engine marketing targeting purchase-intent keywords, automated bidding strategies, negative keyword negative pruning, and Performance Max asset optimization.',
     iconName: 'Search',
+    brandLogo: 'https://cdn.simpleicons.org/googleads/EA4335',
+    brandColor: '#EA4335',
     deliverables: [
       'Single-keyword or tightly clustered ad groups (STAGs)',
       'Performance Max (PMax) feed configuration',
@@ -91,6 +95,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Dominate the local map pack (3-pack) and organic neighborhood queries with localized keyword architecture, schema markup, and geo-targeted landing page optimization.',
     iconName: 'MapPin',
+    brandLogo: 'https://cdn.simpleicons.org/googlemaps/34A853',
+    brandColor: '#34A853',
     deliverables: [
       'Google Business Profile (GBP) audit and 100% completion',
       'Local schema markup (LocalBusiness, GeoCoordinates)',
@@ -110,6 +116,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Systematic citation building across tier-1 directories, niche local citation registries, and multi-point geo-coordinates to anchor entity prominence in Google algorithms.',
     iconName: 'Navigation',
+    brandLogo: 'https://cdn.simpleicons.org/googlemaps/4285F4',
+    brandColor: '#4285F4',
     deliverables: [
       '100% NAP (Name, Address, Phone) consistency audit',
       'Tier 1 directory submissions (Yelp, YellowPages, Bing Places, Apple Maps)',
@@ -129,6 +137,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Complete optimization of Facebook Business Page assets, call-to-action routing, vanity URLs, tab hierarchies, product catalog integrations, and automated messenger bots.',
     iconName: 'Share2',
+    brandLogo: 'https://cdn.simpleicons.org/facebook/1877F2',
+    brandColor: '#1877F2',
     deliverables: [
       'Custom branded cover video/banner with mobile-safe zone',
       'Automated FAQ greeting & lead capture Messenger flow',
@@ -148,6 +158,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Strategic organic social management connecting visual storytelling, educational carousel sequences, trend alignment, and active community engagement to nurture prospects.',
     iconName: 'Users',
+    brandLogo: 'https://cdn.simpleicons.org/instagram/E4405F',
+    brandColor: '#E4405F',
     deliverables: [
       'Monthly editorial calendar with theme-based content pillars',
       'Graphic carousels, short-form reels scripts, and copy',
@@ -167,6 +179,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Ensure every micro and macro conversion is accurately tracked, deduplicated, and attributed amidst iOS 14+ privacy and third-party cookie restrictions.',
     iconName: 'Target',
+    brandLogo: 'https://cdn.simpleicons.org/meta/0668E1',
+    brandColor: '#0668E1',
     deliverables: [
       'Meta Pixel + Conversions API (CAPI) dual tagging',
       'Event deduplication via unique event_id pairing',
@@ -186,6 +200,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Custom GA4 architecture designed to answer real business questions: lead source attribution, user drop-off bottlenecks, e-commerce revenue streams, and cohort retention.',
     iconName: 'BarChart3',
+    brandLogo: 'https://cdn.simpleicons.org/googleanalytics/E37400',
+    brandColor: '#E37400',
     deliverables: [
       'GA4 property provisioning, data stream setup, and retention tuning',
       'Custom event parameters, user properties, and calculated metrics',
@@ -205,6 +221,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Streamlined implementation of Google Tag Manager (Web & Server-side), eliminating code bloat, speeding up page performance, and enabling rapid ad tag deployments.',
     iconName: 'Code',
+    brandLogo: 'https://cdn.simpleicons.org/googletagmanager/246FDB',
+    brandColor: '#246FDB',
     deliverables: [
       'Client-side and Server-side GTM container configuration',
       'Custom Data Layer specifications for development teams',
@@ -224,6 +242,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Comprehensive content and semantic code refinement: H-tag hierarchies, NLP keyword coverage, search intent alignment, schema microdata, and image optimizations.',
     iconName: 'FileText',
+    brandLogo: 'https://cdn.simpleicons.org/semrush/FF642D',
+    brandColor: '#FF642D',
     deliverables: [
       'In-depth search intent keyword mapping for all target pages',
       'Title tag, meta description, and header (H1-H4) optimization',
@@ -243,6 +263,8 @@ export const SERVICES_DATA: ServiceItem[] = [
     fullDescription:
       'Sustainable domain rating growth via genuine editorial mentions, guest contributions on industry publications, brand reclamation, and competitor backlink gap replication.',
     iconName: 'ExternalLink',
+    brandLogo: 'https://cdn.simpleicons.org/googlesearchconsole/458CF5',
+    brandColor: '#458CF5',
     deliverables: [
       'Competitor backlink profile gap analysis',
       'Custom digital PR campaign pitches & journalist outreach',
@@ -252,6 +274,27 @@ export const SERVICES_DATA: ServiceItem[] = [
     ],
     tools: ['Ahrefs', 'Semrush', 'Pitchbox', 'Hunter.io', 'HARO / Connectively'],
     typicalOutcomes: 'Domain Rating (DR) jump from 18 to 44+ with 30+ contextual referring domains',
+  },
+  {
+    id: 'lead-generation',
+    title: 'Lead Generation',
+    category: 'Lead Generation',
+    shortDescription:
+      'Generate high-quality, sales-qualified B2B and B2C leads using targeted funnels, automated outreach, and conversion systems.',
+    fullDescription:
+      'End-to-end inbound and outbound lead generation systems designed to capture high-intent prospects, qualify leads with custom funnels, and feed automated appointment pipelines.',
+    iconName: 'UserCheck',
+    brandLogo: 'https://cdn.simpleicons.org/hubspot/FF7A59',
+    brandColor: '#FF7A59',
+    deliverables: [
+      'High-converting landing page & lead capture funnel design',
+      'Targeted B2B decision-maker list building and data enrichment',
+      'Automated email nurture sequences & appointment booking workflows',
+      'Multi-channel retargeting (Meta, LinkedIn & Google Ads)',
+      'CRM integration, lead scoring, and pipeline tracking (HubSpot / Zapier)',
+    ],
+    tools: ['HubSpot', 'Apollo.io', 'LinkedIn Sales Navigator', 'Zapier', 'Typeform'],
+    typicalOutcomes: '+240% Increase in qualified sales meetings with 40% reduction in Cost Per Lead (CPL)',
   },
 ];
 

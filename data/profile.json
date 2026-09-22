@@ -13,7 +13,7 @@
     "Audience Segmentation & Retargeting Loops"
   ],
   "careerFocus": "Partnering with forward-thinking e-commerce brands, high-growth tech startups, and ambitious local businesses to turn digital touchpoints into revenue engines.",
-  "heroImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1800&auto=format&fit=crop",
+  "heroImage": "https://unsplash.com/photos/s_16ctZLaWs/download?force=true",
   "heroImageOpacity": 80,
   "profileImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=900&auto=format&fit=crop",
   "email": "nabiulislam609@gmail.com",
@@ -32,5 +32,7 @@
     "adSpendManaged": "$1.4M+",
     "avgRoi": "3.8x ROAS",
     "completedProjects": "45+ Projects"
-  }
+  },
+  "themeColor": "#06B6D4",
+  "backgroundColor": "#0A2CD6"
 }

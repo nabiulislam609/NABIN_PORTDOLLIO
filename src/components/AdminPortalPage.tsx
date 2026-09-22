@@ -1128,6 +1128,43 @@ export const AdminPortalPage: React.FC<AdminPortalPageProps> = ({
                       </div>
                     </div>
                   )}
+
+                  {/* Website Hero Banner - Marked Area */}
+                  <div className="p-4 rounded-xl bg-[#151F36] border border-[#232E45] space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#D0DBEA] block">Hero Background Banner</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-300">
+                        Marked Area
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-16 h-10 rounded-lg overflow-hidden border border-cyan-500/40 bg-[#0B1528] shadow-md shrink-0 relative">
+                        <img
+                          src={profile.heroImage}
+                          alt="Hero Banner Preview"
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs font-bold text-white leading-tight truncate">
+                          AI Marketer Cinematic Banner
+                        </div>
+                        <div className="text-[10px] text-emerald-400 flex items-center gap-1 mt-0.5">
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>Active on Homepage Hero</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={onOpenProfileSettings}
+                          className="text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1 mt-1 font-semibold cursor-pointer"
+                        >
+                          <ExternalLink className="w-2.5 h-2.5" />
+                          <span>Change / Upload in Profile Settings</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

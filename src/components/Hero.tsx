@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import {
   ArrowRight,
   ChevronDown,
@@ -14,18 +14,67 @@ import {
 } from 'lucide-react';
 import { ProfileConfig } from '../types.ts';
 import { scrollToElement } from '../utils/scroll.ts';
+import { processImageFile } from '../utils/imageUtils.ts';
 
 interface HeroProps {
   profile: ProfileConfig;
   onExplorePortfolio: () => void;
   onContactClick: () => void;
+  onUpdateHeroImage?: (newHeroUrl: string) => Promise<void> | void;
+  isAdmin?: boolean;
 }
 
 export const Hero: React.FC<HeroProps> = ({
   profile,
   onExplorePortfolio,
   onContactClick,
+  onUpdateHeroImage,
+  isAdmin = false,
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadNotice, setUploadNotice] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  // Normalize Unsplash page links into direct stream URLs
+  const resolvedHeroImage = useMemo(() => {
+    if (imgError) {
+      return 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1800&auto=format&fit=crop';
+    }
+    const raw = profile.heroImage || '';
+    if (raw.includes('unsplash.com/photos/') && !raw.includes('/download')) {
+      return `${raw.replace(/\/$/, '')}/download?force=true`;
+    }
+    return raw;
+  }, [profile.heroImage, imgError]);
+
+  const handleHeroFile = async (file: File) => {
+    try {
+      setUploadNotice(null);
+      const dataUrl = await processImageFile(file, 2400, 0.92);
+      if (onUpdateHeroImage) {
+        await onUpdateHeroImage(dataUrl);
+      }
+      setUploadNotice('Hero image updated successfully!');
+      setTimeout(() => setUploadNotice(null), 3500);
+    } catch (err: any) {
+      setUploadNotice(err?.message || 'Failed to update image.');
+      setTimeout(() => setUploadNotice(null), 4000);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    if (!isAdmin) return;
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        await handleHeroFile(file);
+      }
+    }
+  };
+
   const rawPrimary = profile.title?.includes('|')
     ? profile.title.split('|')[0]?.trim()
     : profile.title?.trim();
@@ -41,17 +90,55 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section
       id="home"
-      className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragOver(true);
+      }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={handleDrop}
+      className={`relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden transition-all ${
+        isDragOver ? 'ring-4 ring-cyan-400/80 ring-inset bg-cyan-950/20' : ''
+      }`}
     >
+      {/* Hidden File Input for instant hero replacement if triggered by admin */}
+      {isAdmin && (
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              handleHeroFile(e.target.files[0]);
+            }
+          }}
+        />
+      )}
+
+      {/* Upload notice notification if triggered */}
+      {uploadNotice && (
+        <div className="fixed top-20 right-6 z-50 px-3.5 py-2 rounded-xl bg-emerald-950/95 border border-emerald-500/50 text-emerald-300 text-xs font-semibold shadow-2xl animate-fade-in flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{uploadNotice}</span>
+        </div>
+      )}
+
+      {isDragOver && isAdmin && (
+        <div className="absolute top-24 right-4 sm:right-8 z-30 px-3.5 py-2 rounded-xl bg-cyan-950/95 border-2 border-cyan-400 text-cyan-200 text-xs font-bold animate-pulse shadow-lg">
+          Release to set as Hero Banner
+        </div>
+      )}
+
       {/* Background Image with High Visibility and Refined Cinematic Vignette */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img
-          src={profile.heroImage}
+          src={resolvedHeroImage}
           alt="Hero Background Banner"
           referrerPolicy="no-referrer"
+          onError={() => setImgError(true)}
           className="w-full h-full object-cover object-center scale-105 transform motion-safe:transition-transform duration-1000"
           style={{
-            opacity: (profile.heroImageOpacity !== undefined ? profile.heroImageOpacity : 80) / 100,
+            opacity: (profile.heroImageOpacity !== undefined ? profile.heroImageOpacity : 90) / 100,
           }}
         />
         {/* Soft center text-scrim so graphics, charts & portrait remain vibrant and clearly visible */}
@@ -59,11 +146,11 @@ export const Hero: React.FC<HeroProps> = ({
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 45%, rgba(10, 14, 26, 0.40) 0%, rgba(10, 14, 26, 0.15) 50%, rgba(10, 14, 26, 0.65) 100%)',
+              'radial-gradient(ellipse at 50% 45%, rgba(10, 14, 26, 0.28) 0%, rgba(10, 14, 26, 0.08) 50%, rgba(10, 14, 26, 0.65) 100%)',
           }}
         />
         {/* Subtle ambient tint to keep harmonious dark contrast */}
-        <div className="absolute inset-0 bg-[#0A0E1A]/30 backdrop-blur-[0.5px]" />
+        <div className="absolute inset-0 bg-[#0A0E1A]/15 backdrop-blur-[0.5px]" />
         {/* Smooth top gradient for navbar contrast */}
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0A0E1A]/90 via-[#0A0E1A]/40 to-transparent" />
         {/* Smooth bottom fade into about section */}

@@ -22,7 +22,7 @@ export const DEFAULT_PROFILE: ProfileConfig = {
   careerFocus:
     'Partnering with forward-thinking e-commerce brands, high-growth tech startups, and ambitious local businesses to turn digital touchpoints into revenue engines.',
   heroImage:
-    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1800&auto=format&fit=crop',
+    'https://unsplash.com/photos/s_16ctZLaWs/download?force=true',
   heroImageOpacity: 75,
   profileImage:
     'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=900&auto=format&fit=crop',

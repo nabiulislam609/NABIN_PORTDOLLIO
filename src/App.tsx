@@ -378,6 +378,11 @@ export default function App() {
             {/* Hero Section */}
             <Hero
               profile={profile}
+              isAdmin={isAdmin}
+              onUpdateHeroImage={async (newHeroUrl) => {
+                const updated = { ...profile, heroImage: newHeroUrl };
+                await handleSaveProfile(updated);
+              }}
               onExplorePortfolio={() => scrollToSection('portfolio')}
               onContactClick={() => scrollToSection('contact')}
             />

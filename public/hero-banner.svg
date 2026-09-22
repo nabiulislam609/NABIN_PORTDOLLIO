@@ -1,0 +1,503 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="skyGlow" cx="15%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#0F244A"/>
+      <stop offset="50%" stop-color="#091224"/>
+      <stop offset="100%" stop-color="#040711"/>
+    </radialGradient>
+
+    <linearGradient id="cityGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#030712" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Warm interior right ambient -->
+    <radialGradient id="warmShelf" cx="92%" cy="25%" r="45%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#D97706" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#060B18" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Desk Gradient -->
+    <linearGradient id="deskGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#141E33"/>
+      <stop offset="40%" stop-color="#243352"/>
+      <stop offset="70%" stop-color="#1E192B"/>
+      <stop offset="100%" stop-color="#31221B"/>
+    </linearGradient>
+
+    <linearGradient id="laptopGlow" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#818CF8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#C084FC" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <!-- Holographic Card Gradients -->
+    <linearGradient id="holoCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.25"/>
+    </linearGradient>
+
+    <linearGradient id="holoBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="50%" stop-color="#60A5FA"/>
+      <stop offset="100%" stop-color="#C084FC"/>
+    </linearGradient>
+
+    <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="50%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#E040FB"/>
+    </linearGradient>
+
+    <!-- Glow Filters -->
+    <filter id="neonCyan" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="superGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="bigBlur"/>
+      <feGaussianBlur stdDeviation="5" result="sharpBlur"/>
+      <feMerge>
+        <feMergeNode in="bigBlur"/>
+        <feMergeNode in="sharpBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="intenseBlue" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00E5FF" flood-opacity="0.75"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1920" height="1080" fill="url(#skyGlow)"/>
+
+  <!-- Left: Midnight City Skyline Bokeh & Water Reflection -->
+  <g opacity="0.85">
+    <!-- City lights glow on water -->
+    <ellipse cx="280" cy="850" rx="320" ry="120" fill="#0284C7" opacity="0.2" filter="url(#superGlow)"/>
+    <ellipse cx="140" cy="720" rx="180" ry="80" fill="#38BDF8" opacity="0.15"/>
+    
+    <!-- Distant Skyscraper Silhouettes -->
+    <rect x="40" y="380" width="45" height="420" fill="#0A162B" opacity="0.8"/>
+    <rect x="95" y="310" width="60" height="490" fill="#071224" opacity="0.9"/>
+    <rect x="165" y="420" width="35" height="380" fill="#0C1B33" opacity="0.75"/>
+    <rect x="210" y="340" width="55" height="460" fill="#081427" opacity="0.85"/>
+    <rect x="275" y="460" width="40" height="340" fill="#0A182E" opacity="0.7"/>
+    <rect x="325" y="390" width="50" height="410" fill="#081326" opacity="0.8"/>
+    <rect x="385" y="480" width="45" height="320" fill="#0A1629" opacity="0.6"/>
+
+    <!-- Window Light Dots (Bokeh) -->
+    <g fill="#38BDF8" opacity="0.6">
+      <circle cx="110" cy="350" r="2"/><circle cx="130" cy="350" r="2"/><circle cx="110" cy="380" r="2"/><circle cx="140" cy="410" r="2"/>
+      <circle cx="230" cy="370" r="2.5"/><circle cx="245" cy="370" r="2"/><circle cx="230" cy="420" r="2"/><circle cx="245" cy="460" r="2"/>
+      <circle cx="60" cy="440" r="2"/><circle cx="70" cy="490" r="2"/><circle cx="340" cy="430" r="2"/><circle cx="355" cy="470" r="2"/>
+    </g>
+    <!-- Bokeh circles in city background -->
+    <circle cx="90" cy="560" r="18" fill="#38BDF8" opacity="0.25" filter="url(#neonCyan)"/>
+    <circle cx="220" cy="620" r="24" fill="#00E5FF" opacity="0.2" filter="url(#neonCyan)"/>
+    <circle cx="310" cy="540" r="14" fill="#818CF8" opacity="0.25"/>
+    <circle cx="180" cy="480" r="10" fill="#38BDF8" opacity="0.3"/>
+    <circle cx="420" cy="640" r="20" fill="#0284C7" opacity="0.2"/>
+  </g>
+
+  <!-- Right: Warm Ambient Backlit Bookshelf & Modern Studio Accents -->
+  <rect width="500" height="1080" x="1420" fill="url(#warmShelf)"/>
+  <g opacity="0.85">
+    <!-- Shelves -->
+    <rect x="1560" y="160" width="360" height="12" fill="#2E231B" rx="3"/>
+    <rect x="1560" y="320" width="360" height="12" fill="#2E231B" rx="3"/>
+    <rect x="1560" y="480" width="360" height="12" fill="#2E231B" rx="3"/>
+
+    <!-- LED warm light strips under shelves -->
+    <line x1="1560" y1="172" x2="1920" y2="172" stroke="#F59E0B" stroke-width="4" opacity="0.6" filter="url(#neonCyan)"/>
+    <line x1="1560" y1="332" x2="1920" y2="332" stroke="#F59E0B" stroke-width="4" opacity="0.6" filter="url(#neonCyan)"/>
+
+    <!-- Books & Decorative Accents -->
+    <rect x="1590" y="210" width="22" height="110" fill="#3B82F6" rx="2" opacity="0.7"/>
+    <rect x="1615" y="230" width="18" height="90" fill="#10B981" rx="2" opacity="0.7"/>
+    <rect x="1636" y="195" width="26" height="125" fill="#EF4444" rx="2" opacity="0.6"/>
+    <rect x="1665" y="225" width="20" height="95" fill="#F59E0B" rx="2" opacity="0.7"/>
+    <!-- Modern pot plant -->
+    <rect x="1750" y="260" width="45" height="60" fill="#1E293B" rx="4"/>
+    <ellipse cx="1772" cy="245" rx="35" ry="25" fill="#10B981" opacity="0.7"/>
+    <ellipse cx="1790" cy="235" rx="25" ry="20" fill="#059669" opacity="0.8"/>
+  </g>
+
+  <!-- Large Modern Wooden Studio Desk -->
+  <polygon points="560,820 1920,800 1920,1080 500,1080" fill="url(#deskGrad)"/>
+  <!-- Desk edge highlight -->
+  <line x1="560" y1="820" x2="1920" y2="800" stroke="#475569" stroke-width="2.5" opacity="0.8"/>
+  <line x1="560" y1="822" x2="1920" y2="802" stroke="#00E5FF" stroke-width="1" opacity="0.4" filter="url(#neonCyan)"/>
+
+  <!-- Coffee Mug labeled "DN" in electric cyan -->
+  <g transform="translate(1480, 810)">
+    <!-- Mug Body -->
+    <rect x="0" y="0" width="70" height="85" rx="10" fill="#0F172A" stroke="#334155" stroke-width="2"/>
+    <!-- Mug Handle -->
+    <path d="M 70 20 C 95 20, 95 65, 70 65" fill="none" stroke="#334155" stroke-width="8" stroke-linecap="round"/>
+    <!-- "DN" Logo on Mug -->
+    <text x="35" y="52" fill="#00E5FF" font-family="system-ui, sans-serif" font-weight="900" font-size="22" text-anchor="middle" filter="url(#neonCyan)">DN</text>
+  </g>
+
+  <!-- Desk Notebook & Accessories -->
+  <g transform="translate(1330, 850)">
+    <rect x="0" y="0" width="180" height="40" rx="6" fill="#0B132B" stroke="#1E293B" stroke-width="2"/>
+    <rect x="25" y="45" width="220" height="25" rx="4" fill="#0284C7" opacity="0.15"/>
+    <line x1="10" y1="18" x2="120" y2="18" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <!-- Stylus / Pen -->
+    <line x1="130" y1="5" x2="170" y2="35" stroke="#94A3B8" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Stacked Books on Desk Right -->
+  <g transform="translate(1650, 830)">
+    <rect x="0" y="0" width="160" height="24" rx="4" fill="#1E293B" stroke="#334155"/>
+    <rect x="5" y="26" width="155" height="24" rx="4" fill="#0F172A" stroke="#334155"/>
+    <rect x="0" y="52" width="168" height="26" rx="4" fill="#1E293B" stroke="#334155"/>
+  </g>
+
+  <!-- The Marketer Character Silhouette & Stylized Persona (Nabin) -->
+  <g id="character-marketer">
+    <!-- Body / Torso -->
+    <path d="M 1220 540 
+             C 1260 545, 1310 560, 1370 595 
+             L 1520 740 
+             L 1540 850 
+             L 1250 850 
+             L 1150 810 
+             L 1220 540 Z" 
+          fill="#0B1329" stroke="#1E2A4A" stroke-width="2"/>
+    
+    <!-- White inner crewneck tee collar -->
+    <path d="M 1365 635 C 1390 670, 1420 670, 1445 635 Z" fill="#F8FAFC" opacity="0.9"/>
+
+    <!-- Navy casual button-down shirt -->
+    <path d="M 1290 600 C 1340 590, 1440 590, 1490 610 L 1450 780 L 1330 780 Z" fill="#152238"/>
+
+    <!-- Left Arm resting forward on desk / laptop -->
+    <path d="M 1220 710 Q 1200 780 1280 820 L 1380 820 Q 1390 790 1330 770 Z" fill="#182740"/>
+    
+    <!-- Right Arm leaning thoughtfully up toward chin with pen in hand -->
+    <path d="M 1430 650 Q 1460 740 1480 810 L 1400 815 Q 1400 720 1360 670 Z" fill="#131E35"/>
+    <path d="M 1350 640 Q 1380 570 1410 550 L 1390 540 Q 1340 590 1320 630 Z" fill="#E2B193"/>
+    <!-- Stylus / Pen in right hand resting near chin -->
+    <line x1="1395" y1="570" x2="1430" y2="510" stroke="#00E5FF" stroke-width="3" filter="url(#neonCyan)"/>
+
+    <!-- Head & Neck -->
+    <path d="M 1375 510 L 1415 510 L 1425 615 L 1365 615 Z" fill="#D8A585"/>
+    <!-- Jawline & Face Profile with stylish trimmed dark beard -->
+    <path d="M 1370 420 
+             C 1370 380, 1440 375, 1480 400 
+             C 1515 425, 1530 480, 1510 525 
+             C 1495 555, 1450 580, 1400 570 
+             C 1365 560, 1360 520, 1365 470 Z" 
+          fill="#E6B898"/>
+    <!-- Trimmed stylish dark beard & mustache -->
+    <path d="M 1395 490 
+             C 1420 495, 1450 490, 1475 500 
+             C 1490 515, 1485 550, 1450 565 
+             C 1420 575, 1390 565, 1385 540 
+             C 1380 510, 1385 495, 1395 490 Z" 
+          fill="#1E293B"/>
+
+    <!-- Thoughtful smile & nose contour -->
+    <path d="M 1435 460 L 1450 475 L 1435 480" fill="none" stroke="#B48265" stroke-width="2"/>
+    <path d="M 1430 500 Q 1445 512 1460 500" fill="none" stroke="#0F172A" stroke-width="3"/>
+
+    <!-- Modern Rectangular Black Eyeglasses with Blue Light Reflection -->
+    <g transform="translate(1385, 430)">
+      <rect x="0" y="0" width="38" height="24" rx="5" fill="none" stroke="#090E17" stroke-width="3.5"/>
+      <rect x="44" y="0" width="38" height="24" rx="5" fill="none" stroke="#090E17" stroke-width="3.5"/>
+      <line x1="38" y1="10" x2="44" y2="10" stroke="#090E17" stroke-width="3"/>
+      <!-- Cyan glowing lens reflection -->
+      <line x1="6" y1="6" x2="28" y2="18" stroke="#38BDF8" stroke-width="2" opacity="0.8" filter="url(#neonCyan)"/>
+      <line x1="50" y1="6" x2="72" y2="18" stroke="#38BDF8" stroke-width="2" opacity="0.8" filter="url(#neonCyan)"/>
+    </g>
+
+    <!-- Thick Stylish Dark Wavy Hair -->
+    <path d="M 1360 420 
+             C 1350 370, 1380 320, 1440 315 
+             C 1490 310, 1540 340, 1550 395 
+             C 1555 425, 1540 460, 1530 475 
+             C 1515 440, 1500 415, 1470 410 
+             C 1430 405, 1390 425, 1360 420 Z" 
+          fill="#0B1220"/>
+  </g>
+
+  <!-- Laptop on Desk with Glowing Keyboard & Screen Glow -->
+  <g transform="translate(980, 640)" id="laptop-device">
+    <!-- Light cone projected from screen -->
+    <polygon points="120,30 -80,-150 480,-150 280,30" fill="url(#laptopGlow)" opacity="0.45"/>
+    
+    <!-- Laptop Open Screen Lid (Back view facing viewer slightly angled) -->
+    <polygon points="100,10 320,10 360,180 60,180" fill="#CBD5E1" stroke="#94A3B8" stroke-width="2"/>
+    <!-- Glowing Apple / Minimalist Tech Logo on lid -->
+    <circle cx="210" cy="95" r="16" fill="#F8FAFC" filter="url(#neonCyan)"/>
+
+    <!-- Laptop Base / Keyboard Surface -->
+    <polygon points="60,180 360,180 430,225 -10,225" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+    <!-- Trackpad -->
+    <polygon points="175,200 245,200 250,220 170,220" fill="#94A3B8" opacity="0.6"/>
+  </g>
+
+  <!-- ==================== HOLOGRAPHIC 3D UI OVERLAYS ==================== -->
+
+  <!-- 1. Central Glowing Holographic AI Brain & Neural Network -->
+  <g id="holo-ai-brain" transform="translate(1080, 260)">
+    <!-- Ambient Brain Aura -->
+    <circle cx="160" cy="120" r="160" fill="#00E5FF" opacity="0.12" filter="url(#superGlow)"/>
+    <circle cx="160" cy="120" r="100" fill="#D500F9" opacity="0.15" filter="url(#superGlow)"/>
+
+    <!-- Neural Network Node Links -->
+    <g stroke="url(#brainGrad)" stroke-width="1.8" opacity="0.85" filter="url(#neonCyan)">
+      <!-- Outer cerebral lobe contour -->
+      <path d="M 60 110 C 60 60, 110 30, 160 30 C 210 30, 260 60, 260 110 C 265 140, 250 170, 230 190 C 200 215, 170 220, 160 220 C 150 220, 120 215, 90 190 C 70 170, 55 140, 60 110 Z" fill="none" stroke-dasharray="4 2"/>
+      
+      <!-- Left hemisphere mesh -->
+      <line x1="160" y1="40" x2="110" y2="70"/>
+      <line x1="110" y1="70" x2="80" y2="120"/>
+      <line x1="80" y1="120" x2="100" y2="170"/>
+      <line x1="100" y1="170" x2="160" y2="210"/>
+      <line x1="110" y1="70" x2="140" y2="120"/>
+      <line x1="140" y1="120" x2="100" y2="170"/>
+      
+      <!-- Right hemisphere mesh -->
+      <line x1="160" y1="40" x2="210" y2="70"/>
+      <line x1="210" y1="70" x2="240" y2="120"/>
+      <line x1="240" y1="120" x2="220" y2="170"/>
+      <line x1="220" y1="170" x2="160" y2="210"/>
+      <line x1="210" y1="70" x2="180" y2="120"/>
+      <line x1="180" y1="120" x2="220" y2="170"/>
+      
+      <!-- Synaptic cross bridges -->
+      <line x1="140" y1="120" x2="180" y2="120"/>
+    </g>
+
+    <!-- Glowing Synapse Nodes -->
+    <g fill="#FFFFFF" filter="url(#neonCyan)">
+      <circle cx="160" cy="40" r="4"/><circle cx="110" cy="70" r="4"/><circle cx="80" cy="120" r="4"/>
+      <circle cx="100" cy="170" r="4"/><circle cx="160" cy="210" r="4"/><circle cx="210" cy="70" r="4"/>
+      <circle cx="240" cy="120" r="4"/><circle cx="220" cy="170" r="4"/><circle cx="140" cy="120" r="3.5"/><circle cx="180" cy="120" r="3.5"/>
+    </g>
+
+    <!-- Central Glowing "AI" Emblem Badge -->
+    <rect x="120" y="95" width="80" height="50" rx="14" fill="#091224" stroke="url(#holoBorder)" stroke-width="2.5" filter="url(#intenseBlue)"/>
+    <text x="160" y="132" fill="#00F0FF" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="30" letter-spacing="3" text-anchor="middle" filter="url(#superGlow)">AI</text>
+  </g>
+
+  <!-- 2. Floating Top Neon Pill Icons (Notes, Analytics, Code, Megaphone) -->
+  <g id="top-floating-icons" transform="translate(940, 150)">
+    <!-- 1: Notes / Copywriting -->
+    <g transform="translate(0, 0)">
+      <rect x="0" y="0" width="85" height="85" rx="20" fill="url(#holoCardGrad)" stroke="#38BDF8" stroke-width="2" filter="url(#neonCyan)"/>
+      <path d="M 28 30 L 52 30 M 28 42 L 48 42 M 28 54 L 40 54" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 52 50 L 60 42 L 56 38 L 48 46 Z" fill="#00E5FF"/>
+    </g>
+
+    <!-- 2: Analytics Bar Chart -->
+    <g transform="translate(110, 0)">
+      <rect x="0" y="0" width="85" height="85" rx="20" fill="url(#holoCardGrad)" stroke="#38BDF8" stroke-width="2" filter="url(#neonCyan)"/>
+      <line x1="24" y1="60" x2="24" y2="48" stroke="#38BDF8" stroke-width="5" stroke-linecap="round"/>
+      <line x1="38" y1="60" x2="38" y2="38" stroke="#00E5FF" stroke-width="5" stroke-linecap="round"/>
+      <line x1="52" y1="60" x2="52" y2="28" stroke="#F43F5E" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 22 48 L 36 38 L 54 26" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- 3: Code Brackets </> -->
+    <g transform="translate(260, 0)">
+      <rect x="0" y="0" width="85" height="85" rx="20" fill="url(#holoCardGrad)" stroke="#60A5FA" stroke-width="2" filter="url(#neonCyan)"/>
+      <text x="42" y="55" fill="#FFFFFF" font-family="monospace" font-weight="900" font-size="34" text-anchor="middle" filter="url(#neonCyan)">&lt;/&gt;</text>
+    </g>
+
+    <!-- 4: Marketing Megaphone -->
+    <g transform="translate(370, 0)">
+      <rect x="0" y="0" width="85" height="85" rx="20" fill="url(#holoCardGrad)" stroke="#00E5FF" stroke-width="2" filter="url(#neonCyan)"/>
+      <!-- Megaphone shape -->
+      <path d="M 28 42 L 44 32 L 44 54 L 28 48 Z" fill="#00E5FF"/>
+      <path d="M 44 34 L 56 26 L 56 60 L 44 52 Z" fill="#38BDF8"/>
+      <line x1="28" y1="46" x2="24" y2="58" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 60 38 Q 66 43 60 48" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+    </g>
+  </g>
+
+  <!-- 3. Left Side: Floating AI Assistant & Checklist Holographic Card -->
+  <g id="left-checklist-card" transform="translate(790, 270)">
+    <rect x="0" y="0" width="240" height="200" rx="20" fill="url(#holoCardGrad)" stroke="url(#holoBorder)" stroke-width="2" filter="url(#neonCyan)"/>
+    
+    <!-- Checklist Items -->
+    <g transform="translate(20, 30)">
+      <!-- Item 1 -->
+      <circle cx="10" cy="10" r="9" fill="#0284C7" stroke="#38BDF8"/>
+      <path d="M 6 10 L 9 13 L 14 7" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+      <rect x="30" y="6" width="75" height="8" rx="4" fill="#E2E8F0" opacity="0.9"/>
+
+      <!-- Item 2 -->
+      <circle cx="10" cy="40" r="9" fill="#0284C7" stroke="#38BDF8"/>
+      <path d="M 6 40 L 9 43 L 14 37" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+      <rect x="30" y="36" width="60" height="8" rx="4" fill="#E2E8F0" opacity="0.9"/>
+
+      <!-- Item 3 -->
+      <circle cx="10" cy="70" r="9" fill="#0284C7" stroke="#38BDF8"/>
+      <path d="M 6 70 L 9 73 L 14 67" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+      <rect x="30" y="66" width="70" height="8" rx="4" fill="#E2E8F0" opacity="0.9"/>
+
+      <!-- Item 4 -->
+      <circle cx="10" cy="100" r="9" fill="#0284C7" stroke="#38BDF8"/>
+      <path d="M 6 100 L 9 103 L 14 97" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+      <rect x="30" y="96" width="55" height="8" rx="4" fill="#E2E8F0" opacity="0.9"/>
+    </g>
+
+    <!-- Cute 3D Robot AI Assistant Avatar on Card -->
+    <g transform="translate(145, 60)">
+      <!-- Robot Head -->
+      <rect x="0" y="0" width="65" height="52" rx="18" fill="#F8FAFC" stroke="#00E5FF" stroke-width="2"/>
+      <!-- Robot Screen Face -->
+      <rect x="8" y="10" width="49" height="32" rx="10" fill="#0A1124"/>
+      <!-- Blue Glowing Robot Eyes -->
+      <ellipse cx="22" cy="26" rx="5" ry="6" fill="#00E5FF" filter="url(#neonCyan)"/>
+      <ellipse cx="43" cy="26" rx="5" ry="6" fill="#00E5FF" filter="url(#neonCyan)"/>
+      <!-- Robot Head Antenna -->
+      <line x1="32" y1="0" x2="32" y2="-10" stroke="#00E5FF" stroke-width="3"/>
+      <circle cx="32" cy="-12" r="4" fill="#38BDF8" filter="url(#neonCyan)"/>
+      <!-- Robot Body base -->
+      <path d="M 8 52 C 8 75, 57 75, 57 52 Z" fill="#E2E8F0"/>
+    </g>
+  </g>
+
+  <!-- 4. Left Lower Floating Dock of AI Tools (ChatGPT, Claude, Notion, Midjourney, Meta, Figma) -->
+  <g id="ai-tools-dock" transform="translate(790, 490)">
+    <rect x="0" y="0" width="350" height="70" rx="22" fill="url(#holoCardGrad)" stroke="url(#holoBorder)" stroke-width="2" filter="url(#neonCyan)"/>
+    
+    <!-- 1: ChatGPT OpenAI Swirl (Cyan) -->
+    <g transform="translate(25, 18)">
+      <circle cx="17" cy="17" r="17" fill="#10A37F"/>
+      <path d="M 12 17 C 12 13, 16 10, 20 12 C 22 13, 24 16, 23 19 C 22 22, 18 24, 15 22 Z" fill="none" stroke="#FFFFFF" stroke-width="2.2"/>
+    </g>
+
+    <!-- 2: Claude / Anthropic (Amber Spark) -->
+    <g transform="translate(78, 18)">
+      <circle cx="17" cy="17" r="17" fill="#D97706"/>
+      <polygon points="17,6 20,14 28,17 20,20 17,28 14,20 6,17 14,14" fill="#FFFFFF"/>
+    </g>
+
+    <!-- 3: Notion (Black / White 'N') -->
+    <g transform="translate(132, 18)">
+      <rect x="0" y="0" width="34" height="34" rx="8" fill="#FFFFFF"/>
+      <text x="17" y="25" fill="#000000" font-family="serif" font-weight="900" font-size="22" text-anchor="middle">N</text>
+    </g>
+
+    <!-- 4: Midjourney (Sailboat) -->
+    <g transform="translate(186, 18)">
+      <circle cx="17" cy="17" r="17" fill="#1E293B"/>
+      <path d="M 8 22 L 26 22 L 22 26 L 12 26 Z" fill="#FFFFFF"/>
+      <path d="M 17 8 L 24 20 L 17 20 Z" fill="#38BDF8"/>
+    </g>
+
+    <!-- 5: Meta (Infinity) -->
+    <g transform="translate(240, 18)">
+      <circle cx="17" cy="17" r="17" fill="#0081FB"/>
+      <path d="M 10 17 C 10 13, 14 13, 17 17 C 20 21, 24 21, 24 17 C 24 13, 20 13, 17 17 C 14 21, 10 21, 10 17 Z" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+    </g>
+
+    <!-- 6: Figma (Colorful F) -->
+    <g transform="translate(294, 18)">
+      <circle cx="17" cy="17" r="17" fill="#1E1E1E"/>
+      <circle cx="12" cy="12" r="5" fill="#F24E1E"/>
+      <circle cx="22" cy="12" r="5" fill="#FF7262"/>
+      <circle cx="12" cy="22" r="5" fill="#0ACF83"/>
+      <circle cx="22" cy="22" r="5" fill="#1ABCFE"/>
+    </g>
+  </g>
+
+  <!-- 5. Right Side: Growth Analytics Chart Holographic Card -->
+  <g id="right-analytics-card" transform="translate(1560, 240)">
+    <rect x="0" y="0" width="280" height="150" rx="20" fill="url(#holoCardGrad)" stroke="url(#holoBorder)" stroke-width="2" filter="url(#neonCyan)"/>
+    
+    <!-- Bar chart & growth arrow -->
+    <g transform="translate(25, 30)">
+      <rect x="15" y="55" width="16" height="35" rx="4" fill="#0284C7" opacity="0.8"/>
+      <rect x="42" y="42" width="16" height="48" rx="4" fill="#0284C7" opacity="0.8"/>
+      <rect x="69" y="30" width="16" height="60" rx="4" fill="#00E5FF" opacity="0.9"/>
+      <rect x="96" y="15" width="16" height="75" rx="4" fill="#38BDF8" opacity="0.9"/>
+      <rect x="123" y="2" width="16" height="88" rx="4" fill="#60A5FA"/>
+
+      <!-- Upward trending curve line with glow -->
+      <path d="M 23 55 Q 69 40 131 6" fill="none" stroke="#00F0FF" stroke-width="3.5" filter="url(#neonCyan)"/>
+      <polygon points="131,2 140,4 135,12" fill="#00F0FF" filter="url(#neonCyan)"/>
+    </g>
+
+    <!-- Percentage Growth Metric -->
+    <g transform="translate(195, 45)">
+      <text x="0" y="20" fill="#38BDF8" font-family="system-ui, sans-serif" font-weight="900" font-size="28" filter="url(#neonCyan)">+380%</text>
+      <text x="0" y="42" fill="#94A3B8" font-family="system-ui, sans-serif" font-weight="600" font-size="12">ROAS Scale</text>
+    </g>
+  </g>
+
+  <!-- 6. Right Side: Tech & Enterprise Badges (LinkedIn, Google, MS, Apple, Amazon) -->
+  <g id="tech-brand-pills" transform="translate(1730, 380)">
+    <rect x="0" y="0" width="140" height="95" rx="16" fill="url(#holoCardGrad)" stroke="#38BDF8" stroke-width="1.5" filter="url(#neonCyan)"/>
+    
+    <!-- LinkedIn 'in' -->
+    <rect x="14" y="14" width="24" height="24" rx="5" fill="#0A66C2"/>
+    <text x="26" y="31" fill="#FFFFFF" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle">in</text>
+    
+    <!-- Google 'G' -->
+    <circle cx="68" cy="26" r="12" fill="#FFFFFF"/>
+    <text x="68" y="31" fill="#4285F4" font-family="sans-serif" font-weight="900" font-size="14" text-anchor="middle">G</text>
+
+    <!-- Microsoft 4-Squares -->
+    <g transform="translate(100, 16)">
+      <rect x="0" y="0" width="9" height="9" fill="#F25022"/>
+      <rect x="11" y="0" width="9" height="9" fill="#7FBA00"/>
+      <rect x="0" y="11" width="9" height="9" fill="#00A4EF"/>
+      <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+    </g>
+
+    <!-- Apple Silhouette -->
+    <circle cx="26" cy="65" r="12" fill="#F8FAFC"/>
+    <text x="26" y="70" fill="#000000" font-family="sans-serif" font-weight="bold" font-size="14" text-anchor="middle"></text>
+
+    <!-- Amazon 'a' -->
+    <circle cx="68" cy="65" r="12" fill="#FF9900"/>
+    <text x="68" y="70" fill="#000000" font-family="sans-serif" font-weight="900" font-size="14" text-anchor="middle">a</text>
+  </g>
+
+  <!-- 7. Right Lower: Creative AI Studio Visual Showcase (Landscape & Futuristic Violet Car) -->
+  <g id="right-ai-creative-card" transform="translate(1600, 540)">
+    <rect x="0" y="0" width="260" height="170" rx="20" fill="url(#holoCardGrad)" stroke="url(#holoBorder)" stroke-width="2" filter="url(#neonCyan)"/>
+    
+    <!-- Title -->
+    <text x="20" y="28" fill="#38BDF8" font-family="system-ui, sans-serif" font-weight="700" font-size="13" letter-spacing="1">CREATIVE AI STUDIO</text>
+    
+    <!-- Left Thumbnail: Golden sunset alpine mountain landscape -->
+    <g transform="translate(20, 42)">
+      <rect x="0" y="0" width="105" height="105" rx="12" fill="#1E1B4B" stroke="#818CF8" stroke-width="1.5"/>
+      <!-- Sun -->
+      <circle cx="52" cy="40" r="16" fill="#F59E0B" opacity="0.9"/>
+      <!-- Mountain Peaks -->
+      <polygon points="10,85 45,35 75,85" fill="#4338CA"/>
+      <polygon points="40,85 75,45 100,85" fill="#6366F1"/>
+      <rect x="0" y="80" width="105" height="25" rx="0" fill="#065F46" opacity="0.7"/>
+    </g>
+
+    <!-- Right Thumbnail: Futuristic Electric Violet Sports Car -->
+    <g transform="translate(135, 42)">
+      <rect x="0" y="0" width="105" height="105" rx="12" fill="#090A1A" stroke="#C084FC" stroke-width="1.5"/>
+      <!-- Glowing cyan neon grid road -->
+      <line x1="10" y1="85" x2="95" y2="85" stroke="#00E5FF" stroke-width="1.5" filter="url(#neonCyan)"/>
+      <line x1="25" y1="95" x2="80" y2="95" stroke="#00E5FF" stroke-width="1"/>
+      <!-- Sleek aerodynamic supercar silhouette -->
+      <path d="M 15 72 C 25 60, 40 50, 65 50 C 80 50, 90 62, 95 72 Z" fill="#D946EF" filter="url(#neonCyan)"/>
+      <!-- Wheels -->
+      <circle cx="32" cy="74" r="8" fill="#00E5FF" stroke="#FFFFFF" stroke-width="2"/>
+      <circle cx="78" cy="74" r="8" fill="#00E5FF" stroke="#FFFFFF" stroke-width="2"/>
+    </g>
+  </g>
+</svg>
